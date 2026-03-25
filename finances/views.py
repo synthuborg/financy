@@ -67,6 +67,7 @@ class TransactionListView(LoginRequiredMixin, ListView):
             'data_fim': self.request.GET.get('data_fim', ''),
             'q': self.request.GET.get('q', ''),
         }
+        ctx['import_form'] = ImportStatementForm(user=self.request.user)
         return ctx
 
 
