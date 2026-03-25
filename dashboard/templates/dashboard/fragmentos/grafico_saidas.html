@@ -1,0 +1,66 @@
+<div id="chart-saidas"></div>
+<script>
+  (function () {
+    function fmtBRL(v) {
+      return 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    var labels = {{ dados.labels|safe }};
+    var valores = {{ dados.valores|safe }};
+    var semDados = labels.length === 0;
+
+    var options = {
+      series: semDados ? [1] : valores,
+      labels: semDados ? ['Sem dados'] : labels,
+      chart: {
+        type: 'donut',
+        height: 220,
+        background: 'transparent',
+        animations: { enabled: true, easing: 'easeinout', speed: 600 }
+      },
+      theme: { mode: 'dark' },
+      stroke: { show: false },
+      colors: semDados
+        ? ['#1e293b']
+        : ['#F87171', '#FB923C', '#FBBF24', '#A78BFA', '#38BDF8', '#34D399'],
+      legend: {
+        position: 'bottom',
+        labels: { colors: '#94a3b8' },
+        markers: { radius: 4 }
+      },
+      dataLabels: {
+        enabled: !semDados,
+        style: { colors: ['#0f172a'], fontSize: '11px', fontWeight: 600 },
+        dropShadow: { enabled: false }
+      },
+      plotOptions: {
+        pie: {
+          donut: {
+            size: '65%',
+            labels: {
+              show: !semDados,
+              total: {
+                show: true,
+                label: 'Total',
+                color: '#94a3b8',
+                fontSize: '12px',
+                fontWeight: 500,
+                formatter: function (w) {
+                  var total = w.globals.seriesTotals.reduce(function (a, b) { return a + b; }, 0);
+                  return semDados ? '—' : fmtBRL(total);
+                }
+              }
+            }
+          }
+        }
+      },
+      tooltip: {
+        theme: 'dark',
+        y: { formatter: function (v) { return semDados ? '—' : fmtBRL(v); } }
+      }
+    };
+
+    if (window.chartSaidas) { window.chartSaidas.destroy(); }
+    window.chartSaidas = new ApexCharts(document.getElementById('chart-saidas'), options);
+    window.chartSaidas.render();
+  })();
+</script>

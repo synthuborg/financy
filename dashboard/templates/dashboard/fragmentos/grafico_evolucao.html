@@ -1,0 +1,58 @@
+<div id="chart-evolucao"></div>
+<script>
+  (function () {
+    function fmtBRL(v) {
+      return 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    var options = {
+      series: [
+        { name: 'Entradas', data: {{ dados.entradas|safe }} },
+        { name: 'Saídas', data: {{ dados.saidas|safe }} }
+      ],
+      chart: {
+        type: 'area',
+        height: 220,
+        background: 'transparent',
+        toolbar: { show: false },
+        animations: { enabled: true, easing: 'easeinout', speed: 600 }
+      },
+      theme: { mode: 'dark' },
+      stroke: { curve: 'smooth', width: 2 },
+      fill: {
+        type: 'gradient',
+        gradient: { type: 'vertical', opacityFrom: 0.35, opacityTo: 0.04 }
+      },
+      colors: ['#4ADE80', '#F87171'],
+      xaxis: {
+        categories: {{ dados.labels|safe }},
+        labels: { style: { colors: '#94a3b8', fontSize: '12px' } },
+        axisBorder: { show: false },
+        axisTicks: { show: false }
+      },
+      yaxis: {
+        labels: {
+          style: { colors: '#94a3b8', fontSize: '11px' },
+          formatter: function(v) { return 'R$ ' + v.toLocaleString('pt-BR', { maximumFractionDigits: 0 }); }
+        }
+      },
+      grid: {
+        borderColor: '#1e293b',
+        strokeDashArray: 3,
+        padding: { left: 4, right: 4 }
+      },
+      tooltip: {
+        theme: 'dark',
+        y: { formatter: fmtBRL }
+      },
+      legend: {
+        labels: { colors: '#e2e8f0' },
+        markers: { radius: 4 }
+      },
+      dataLabels: { enabled: false }
+    };
+
+    if (window.chartEvolucao) { window.chartEvolucao.destroy(); }
+    window.chartEvolucao = new ApexCharts(document.getElementById('chart-evolucao'), options);
+    window.chartEvolucao.render();
+  })();
+</script>

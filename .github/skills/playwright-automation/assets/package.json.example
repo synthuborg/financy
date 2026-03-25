@@ -1,0 +1,27 @@
+{
+  "name": "hackaton-app-financas-tests",
+  "version": "1.0.0",
+  "description": "Playwright E2E, Component, API tests + Data automation",
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test tests/e2e",
+    "test:api": "playwright test tests/api",
+    "test:component": "playwright test tests/components",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:report": "playwright show-report",
+    "seed:data": "npx ts-node tests/scripts/seed-standalone.ts",
+    "seed:predefined": "npx playwright test tests/scripts/seed-predefined.ts --headed",
+    "codegen": "playwright codegen http://localhost:8000"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

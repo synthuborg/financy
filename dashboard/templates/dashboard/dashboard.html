@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="flex-1 px-4 py-6 md:px-6 md:py-8 max-w-7xl w-full mx-auto">
+
+  <!-- Cabeçalho da página -->
+  <header class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+    <div>
+      <h1 class="text-2xl md:text-3xl font-bold text-slate-50 mb-1">Dashboard</h1>
+      <p class="text-sm text-slate-400">
+        Olá,
+        <span class="text-slate-300 font-medium">{{ user.get_full_name|default:user.username }}</span>
+        — aqui está o seu resumo financeiro.
+      </p>
+    </div>
+    <!-- Links rápidos -->
+    <div class="flex items-center gap-3 shrink-0">
+      <a href="{% url 'finances:transaction_create' %}" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600
+                text-slate-900 font-semibold px-4 py-2.5 rounded-xl transition-colors
+                text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 min-h-[44px]">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" aria-hidden="true">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Nova Transação
+      </a>
+      <a href="{% url 'finances:transaction_list' %}" class="inline-flex items-center gap-2 bg-slate-700 hover:bg-slate-600
+                text-slate-200 font-medium px-4 py-2.5 rounded-xl transition-colors
+                text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 min-h-[44px]">
+        Ver todas
+      </a>
+    </div>
+  </header>
+
+  <!-- Cards KPI -->
+  <section aria-label="Resumo do mês" class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+
+    <!-- Entradas do Mês -->
+    <div class="bg-slate-800 rounded-2xl border border-slate-700/50 shadow-xl p-5">
+      <div class="flex items-center gap-2 mb-3">
+        <div class="h-8 w-8 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
+          <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            aria-hidden="true">
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+            <polyline points="17 6 23 6 23 12" />
+          </svg>
+        </div>
+        <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Entradas do Mês</p>
+      </div>
+      <p class="text-3xl font-bold text-emerald-400">
+        {% if resumo_mes.total_entradas %}
+        +R$ {{ resumo_mes.total_entradas|floatformat:"2g" }}
+        {% else %}
+        <span class="text-slate-500">R$ 0,00</span>
+        {% endif %}
+      </p>
+      <p class="text-xs text-slate-500 mt-2">Este mês</p>
+    </div>
+
+    <!-- Saídas do Mês -->
+    <div class="bg-slate-800 rounded-2xl border border-slate-700/50 shadow-xl p-5">
+      <div class="flex items-center gap-2 mb-3">
+        <div class="h-8 w-8 rounded-lg bg-red-500/10 flex items-center justify-center shrink-0">
+          <svg class="w-4 h-4 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            aria-hidden="true">
+            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6" />
+            <polyline points="17 18 23 18 23 12" />
+          </svg>
+        </div>
+        <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Saídas do Mês</p>
+      </div>
+      <p class="text-3xl font-bold text-red-400">
+        {% if resumo_mes.total_saidas %}
+        −R$ {{ resumo_mes.total_saidas|floatformat:"2g" }}
+        {% else %}
+        <span class="text-slate-500">R$ 0,00</span>
+        {% endif %}
+      </p>
+      <p class="text-xs text-slate-500 mt-2">Este mês</p>
+    </div>
+
+    <!-- Saldo Líquido -->
+    <div class="bg-slate-800 rounded-2xl border border-slate-700/50 shadow-xl p-5">
+      <div class="flex items-center gap-2 mb-3">
+        <div class="h-8 w-8 rounded-lg bg-violet-500/10 flex items-center justify-center shrink-0">
+          <svg class="w-4 h-4 text-violet-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            aria-hidden="true">
+            <rect x="2" y="5" width="20" height="14" rx="2" />
+            <line x1="2" y1="10" x2="22" y2="10" />
+          </svg>
+        </div>
+        <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Saldo Líquido</p>
+      </div>
+      {% if saldo.saldo_liquido %}
+      {% if saldo.saldo_liquido >= 0 %}
+      <p class="text-3xl font-bold text-violet-400">R$ {{ saldo.saldo_liquido|floatformat:"2g" }}</p>
+      {% else %}
+      <p class="text-3xl font-bold text-red-400">R$ {{ saldo.saldo_liquido|floatformat:"2g" }}</p>
+      {% endif %}
+      {% else %}
+      <p class="text-3xl font-bold text-slate-500">R$ 0,00</p>
+      {% endif %}
+      <p class="text-xs text-slate-500 mt-2">Acumulado até hoje</p>
+    </div>
+
+  </section>
+
+
+
+  <!-- Gráficos -->
+  <section aria-label="Gráficos" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- Evolução Financeira -->
+    <div class="bg-slate-800 rounded-2xl border border-slate-700/50 shadow-xl p-6 col-span-2">
+       
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-sm font-semibold text-slate-300">Evolução Financeira</h2>
+        <span class="text-xs text-slate-500">últimos 6 meses</span>
+      </div>
+      <div hx-get="{% url 'dashboard:grafico_evolucao' %}" hx-trigger="load" hx-swap="innerHTML"
+        aria-label="Carregando gráfico de evolução financeira">
+        <div class="flex items-center justify-center h-[220px]" aria-hidden="true">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-500"></div>
+        </div>
+      </div>
+    </div>
+
+  
+
+    <!-- Distribuição de Saídas -->
+    <div class="bg-slate-800 rounded-2xl border border-slate-700/50 shadow-xl p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-sm font-semibold text-slate-300">Distribuição de Saídas</h2>
+        <span class="text-xs text-slate-500">mês atual</span>
+      </div>
+      <div hx-get="{% url 'dashboard:grafico_saidas' %}" hx-trigger="load" hx-swap="innerHTML"
+        aria-label="Carregando gráfico de distribuição de saídas">
+        <div class="flex items-center justify-center h-[220px]" aria-hidden="true">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-red-400"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Minhas Metas -->
+    <div class="bg-slate-800 rounded-2xl border border-slate-700/50 shadow-xl p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-sm font-semibold text-slate-300">Minhas Metas</h2>
+        <span class="text-xs text-slate-500">progresso</span>
+      </div>
+      <div hx-get="{% url 'dashboard:grafico_metas' %}" hx-trigger="load" hx-swap="innerHTML"
+        aria-label="Carregando gráfico de metas">
+        <div class="flex items-center justify-center h-[220px]" aria-hidden="true">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-400"></div>
+        </div>
+      </div>
+    </div>
+    
+
+
+
+  </section>
+        <!-- Atividade Recente -->
+  <section aria-label="Atividade recente" class="my-8">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-base font-semibold text-slate-200">Atividade Recente</h2>
+      <a href="{% url 'finances:transaction_list' %}"
+        class="text-xs text-sky-400 hover:text-sky-300 transition-colors focus:outline-none focus:underline">
+        Ver todas as transações →
+      </a>
+    </div>
+
+    {% if ultimas_transacoes %}
+    <div class="bg-slate-800 rounded-2xl border border-slate-700/50 shadow-xl overflow-hidden">
+      <ul class="divide-y divide-slate-700/50" role="list">
+        {% for t in ultimas_transacoes %}
+        <li class="group hover:bg-slate-700/40 transition-colors">
+          <div class="flex items-center gap-4 px-5 py-4">
+            <!-- Ícone tipo -->
+            <div class="shrink-0 h-10 w-10 rounded-xl flex items-center justify-center
+                        {% if t.tipo == 'entrada' %}bg-emerald-500/10{% else %}bg-red-500/10{% endif %}">
+              {% if t.tipo == 'entrada' %}
+              <svg class="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" aria-hidden="true">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                <polyline points="17 6 23 6 23 12" />
+              </svg>
+              {% else %}
+              <svg class="w-5 h-5 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
+                <polyline points="23 18 13.5 8.5 8.5 13.5 1 6" />
+                <polyline points="17 18 23 18 23 12" />
+              </svg>
+              {% endif %}
+            </div>
+            <!-- Descrição + data -->
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-slate-100 truncate">{{ t.descricao }}</p>
+              <div class="flex items-center gap-2 mt-0.5 flex-wrap">
+                <span class="text-xs text-slate-400">{{ t.data|date:"d/m/Y" }}</span>
+                {% if t.categoria %}
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+                             {% if t.tipo == 'entrada' %}bg-emerald-500/10 text-emerald-400
+                             {% else %}bg-red-500/10 text-red-400{% endif %}">
+                  {{ t.categoria.nome }}
+                </span>
+                {% endif %}
+              </div>
+            </div>
+            <!-- Valor -->
+            <span class="shrink-0 text-sm font-bold
+                         {% if t.tipo == 'entrada' %}text-emerald-400{% else %}text-red-400{% endif %}">
+              {% if t.tipo == 'entrada' %}+{% else %}−{% endif %}R$ {{ t.valor|floatformat:"2g" }}
+            </span>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% else %}
+    <div class="bg-slate-800 rounded-2xl border border-slate-700/50 p-8 text-center">
+      <p class="text-slate-400 text-sm">Nenhuma transação registrada ainda.</p>
+      <a href="{% url 'finances:transaction_create' %}" class="inline-flex items-center gap-2 mt-4 bg-emerald-500 hover:bg-emerald-600
+                text-slate-900 font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm">
+        Registrar primeira transação
+      </a>
+    </div>
+    {% endif %}
+  </section>
+
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Relatórios — FinTrack{% endblock %}
+{% block content %}
+<div class="min-h-screen bg-zinc-950 relative overflow-hidden flex items-start justify-center py-12 px-4">
+
+  <!-- Orbs decorativos -->
+  <div class="absolute top-20 -left-32 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl animate-pulse-glow pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute bottom-20 -right-32 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse-glow pointer-events-none" aria-hidden="true"></div>
+
+  <div class="w-full max-w-xl relative z-10">
+    <!-- Header -->
+    <div class="mb-8 text-center">
+      <h1 class="text-2xl sm:text-3xl font-bold text-white mb-2">Relatórios Financeiros</h1>
+      <p class="text-zinc-400 text-sm">Gere relatórios detalhados do seu período</p>
+    </div>
+
+    <!-- Card glass -->
+    <div class="glass rounded-2xl p-6 sm:p-8">
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <!-- Data Início -->
+          <div>
+            <label for="{{ form.data_inicio.id_for_label }}" class="block text-sm font-medium text-zinc-300 mb-2">
+              Data Início <span class="text-red-400" aria-hidden="true">*</span>
+            </label>
+            {{ form.data_inicio }}
+            {% if form.data_inicio.errors %}
+            <p class="mt-1.5 text-xs text-red-400" role="alert">{{ form.data_inicio.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+          <!-- Data Fim -->
+          <div>
+            <label for="{{ form.data_fim.id_for_label }}" class="block text-sm font-medium text-zinc-300 mb-2">
+              Data Fim <span class="text-red-400" aria-hidden="true">*</span>
+            </label>
+            {{ form.data_fim }}
+            {% if form.data_fim.errors %}
+            <p class="mt-1.5 text-xs text-red-400" role="alert">{{ form.data_fim.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+          <!-- Formato -->
+          <div class="sm:col-span-2">
+            <label for="{{ form.formato.id_for_label }}" class="block text-sm font-medium text-zinc-300 mb-2">
+              Formato <span class="text-red-400" aria-hidden="true">*</span>
+            </label>
+            {{ form.formato }}
+            {% if form.formato.errors %}
+            <p class="mt-1.5 text-xs text-red-400" role="alert">{{ form.formato.errors.0 }}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Erros gerais do form -->
+        {% if form.non_field_errors %}
+        <div class="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl" role="alert">
+          {% for error in form.non_field_errors %}
+          <p class="text-sm text-red-400">{{ error }}</p>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Botão submit -->
+        <div class="mt-8">
+          <button type="submit"
+            class="w-full bg-gradient-to-r from-violet-600 to-emerald-500 hover:from-violet-700 hover:to-emerald-600
+                   text-white font-semibold py-3 px-6 rounded-xl transition-all text-sm
+                   focus:outline-none focus:ring-2 focus:ring-violet-500 min-h-[44px]
+                   flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Gerar Relatório
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

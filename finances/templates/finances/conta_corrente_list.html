@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block title %}Contas Correntes — FinTrack{% endblock %}
+{% block content %}
+<div class="min-h-screen bg-zinc-950 py-8 px-4">
+  <div class="max-w-7xl w-full mx-auto">
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-2xl font-bold text-white">Contas Correntes</h1>
+        <p class="text-zinc-400 text-sm mt-1">Gerencie suas contas correntes e carteiras</p>
+      </div>
+      <a href="{% url 'finances:conta_corrente_create' %}"
+        class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-medium px-5 py-2.5 rounded-xl transition-colors text-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" aria-hidden="true">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Nova Conta
+      </a>
+    </div>
+
+    {% if contas %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {% for conta, saldo, transacoes in contas_com_saldo %}
+      <div class="glass rounded-2xl p-5 hover:bg-zinc-800/30 transition-colors group">
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex items-start gap-3 flex-1 min-w-0">
+            <!-- Ícone por tipo -->
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0
+              {% if conta.tipo == 'carteira' %}bg-emerald-500/10{% else %}bg-blue-500/10{% endif %}"
+              aria-hidden="true">
+              {% if conta.tipo == 'carteira' %}
+              <svg class="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" aria-hidden="true">
+                <path d="M21 12V7H5a2 2 0 010-4h14v4" />
+                <path d="M3 5v14a2 2 0 002 2h16v-5" />
+                <path d="M18 12a2 2 0 000 4h4v-4z" />
+              </svg>
+              {% else %}
+              <svg class="w-5 h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <line x1="3" y1="9" x2="21" y2="9" />
+                <line x1="3" y1="15" x2="21" y2="15" />
+                <line x1="9" y1="9" x2="9" y2="21" />
+              </svg>
+              {% endif %}
+            </div>
+            <div class="min-w-0">
+              <p class="font-semibold text-white truncate">{{ conta.nome }}</p>
+              <p class="text-xs text-zinc-400 mt-0.5">{{ conta.get_tipo_display }}</p>
+              <!-- Saldo da conta -->
+              <p class="text-sm font-bold mt-2 {% if saldo >= 0 %}text-green-400{% else %}text-red-400{% endif %}"
+                aria-label="Saldo: R$ {{ saldo|floatformat:"2g" }}">
+                R$ {{ saldo|floatformat:"2g" }}
+              </p>
+            </div>
+          </div>
+          <div
+            class="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity shrink-0">
+            <a href="{% url 'finances:conta_corrente_update' conta.pk %}" aria-label="Editar conta {{ conta.nome }}"
+              class="p-1.5 rounded-lg text-zinc-400 hover:text-violet-400 hover:bg-violet-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+            </a>
+            <a href="{% url 'finances:conta_corrente_delete' conta.pk %}" aria-label="Excluir conta {{ conta.nome }}"
+              class="p-1.5 rounded-lg text-zinc-400 hover:text-red-400 hover:bg-red-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6l-1 14H6L5 6" />
+                <path d="M10 11v6M14 11v6" />
+                <path d="M9 6V4h6v2" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Últimas transações -->
+        <div class="border-t border-zinc-800 mt-3 pt-3">
+          <p class="text-zinc-500 text-xs mb-2">Últimas transações</p>
+          {% if transacoes %}
+          <ul class="space-y-1.5">
+            {% for t in transacoes %}
+            <li class="flex items-center justify-between text-xs gap-2">
+              <div class="flex items-center gap-2 min-w-0 flex-1">
+                <span class="text-zinc-300 truncate">{{ t.descricao }}</span>
+                <span class="text-zinc-600 shrink-0">{{ t.data|date:"d/m/Y" }}</span>
+              </div>
+              <span class="shrink-0 font-medium {% if t.tipo == 'entrada' %}text-emerald-400{% else %}text-red-400{% endif %}">
+                {% if t.tipo == 'entrada' %}+{% else %}−{% endif %}R$&nbsp;{{ t.valor|floatformat:"2g" }}
+              </span>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="text-zinc-600 text-xs">Nenhuma transação</p>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="glass rounded-2xl p-12 text-center">
+      <div class="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4"
+        aria-hidden="true">
+        <svg class="w-8 h-8 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+          <line x1="3" y1="9" x2="21" y2="9" />
+          <line x1="3" y1="15" x2="21" y2="15" />
+          <line x1="9" y1="9" x2="9" y2="21" />
+        </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-white mb-2">Nenhuma conta corrente ainda</h3>
+      <p class="text-zinc-400 text-sm mb-6">Cadastre suas contas para controlar seu saldo</p>
+      <a href="{% url 'finances:conta_corrente_create' %}"
+        class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-medium px-6 py-3 rounded-xl transition-colors text-sm">
+        Criar Primeira Conta
+      </a>
+    </div>
+    {% endif %}
+
+    {% if messages %}
+    <div class="fixed bottom-4 right-4 z-50 flex flex-col gap-2" aria-live="polite">
+      {% for message in messages %}
+      <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)" role="alert" class="px-4 py-3 rounded-xl text-sm font-medium shadow-lg
+             {% if message.tags == 'error' %}bg-red-500 text-white{% else %}bg-emerald-500 text-white{% endif %}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

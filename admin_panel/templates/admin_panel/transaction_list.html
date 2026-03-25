@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Transações | Admin FinTrack{% endblock %}
+{% block content %}
+<div class="min-h-screen bg-zinc-950 p-8">
+  <h1 class="text-2xl font-bold text-white mb-4">Transações</h1>
+  <ul class="space-y-2">
+    {% for t in transacoes %}
+    <li class="text-zinc-300 text-sm">{{ t }}</li>
+    {% empty %}
+    <li class="text-zinc-500">Nenhuma transação encontrada.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

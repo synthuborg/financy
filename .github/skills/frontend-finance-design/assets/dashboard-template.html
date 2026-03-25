@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão Financeira Pessoal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.0.0/dist/flowbite.min.js"></script>
+</head>
+<body class="bg-gray-50">
+
+  <!-- ============================================================================ -->
+  <!-- TOPBAR (Mobile + Tablet) -->
+  <!-- ============================================================================ -->
+  <header class="sticky top-0 bg-white shadow-sm md:hidden z-40">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-xl font-bold text-gray-900">Meu Dinheiro</h1>
+      <button class="p-2 hover:bg-gray-100 rounded-lg">
+        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============================================================================ -->
+  <!-- SIDEBAR (Desktop Only) -->
+  <!-- ============================================================================ -->
+  <aside class="hidden lg:block fixed left-0 top-0 w-64 h-screen bg-gray-900 text-white pt-8">
+    <div class="px-6">
+      <h1 class="text-2xl font-bold mb-8">Meu Dinheiro</h1>
+      <nav class="space-y-2">
+        <a href="#" class="block px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold">
+          Dashboard
+        </a>
+        <a href="#" class="block px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-800 transition">
+          Transações
+        </a>
+        <a href="#" class="block px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-800 transition">
+          Categorias
+        </a>
+        <a href="#" class="block px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-800 transition">
+          Relatórios
+        </a>
+        <a href="#" class="block px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-800 transition">
+          Configurações
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- ============================================================================ -->
+  <!-- MAIN CONTENT -->
+  <!-- ============================================================================ -->
+  <main class="lg:ml-64 max-w-7xl mx-auto px-4 py-6 space-y-6">
+
+    <!-- ========================================================================== -->
+    <!-- SEÇÃO 1: SALDO EM DESTAQUE -->
+    <!-- ========================================================================== -->
+    <section class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-6 text-white shadow-lg">
+      <p class="text-sm opacity-90 mb-1">Saldo Atual</p>
+      <h2 class="text-4xl md:text-5xl font-bold">R$ 2.450,50</h2>
+      <p class="text-sm opacity-75 mt-4">Atualizado agora</p>
+    </section>
+
+    <!-- ========================================================================== -->
+    <!-- SEÇÃO 2: CARDS DE RESUMO -->
+    <!-- ========================================================================== -->
+    <section class="grid grid-cols-2 md:grid-cols-3 gap-4">
+      
+      <!-- Card Entradas -->
+      <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition">
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="text-sm text-gray-600 mb-1">Entradas</p>
+            <p class="text-2xl font-bold text-green-600">+R$ 5.200</p>
+          </div>
+          <div class="bg-green-100 p-2 rounded-lg">
+            <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 110 2h-2v-3H12V7z" clip-rule="evenodd"></path>
+              <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Saídas -->
+      <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition">
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="text-sm text-gray-600 mb-1">Saídas</p>
+            <p class="text-2xl font-bold text-red-600">-R$ 2.750</p>
+          </div>
+          <div class="bg-red-100 p-2 rounded-lg">
+            <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Card Saldo do Mês -->
+      <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition col-span-2 md:col-span-1">
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="text-sm text-gray-600 mb-1">Saldo Mês</p>
+            <p class="text-2xl font-bold text-blue-600">+R$ 2.450</p>
+          </div>
+          <div class="bg-blue-100 p-2 rounded-lg">
+            <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M8.433 7.418c.155-.103.346-.196.567-.267.173-.04.326-.063.467-.063.19 0 .368.019.564.063.317.07.516.212.516.212v3.854c0 .076-.122.156-.31.206-1.329.408-4.01.751-7.381.751-.834 0-1.578-.05-2.078-.124C1.408 11.286.98 11.207.98 11.132V7.418c0 .076.122.156.31.206 1.329.408 4.01.751 7.381.751 1.924 0 3.52-.159 4.832-.42zM14.22 12.995c.044.087.064.203.064.3 0 .226-.065.438-.164.627-.833 1.996-4.087 3.022-7.156 3.022s-6.323-1.026-7.156-3.022c-.1-.189-.165-.401-.165-.627 0-.097.02-.213.063-.3.667 1.779 4.305 2.853 7.258 2.853s6.591-1.074 7.256-2.853z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================================== -->
+    <!-- SEÇÃO 3: FILTROS -->
+    <!-- ========================================================================== -->
+    <section class="bg-white p-4 rounded-lg border border-gray-200">
+      <p class="text-sm font-semibold text-gray-700 mb-3">Filtrar por:</p>
+      <div class="flex flex-col md:flex-row gap-3">
+        
+        <!-- Filtro Mês -->
+        <select class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <option value="">Todos os meses</option>
+          <option value="01">Janeiro 2024</option>
+          <option value="02">Fevereiro 2024</option>
+          <option value="03" selected>Março 2024</option>
+        </select>
+        
+        <!-- Filtro Categoria -->
+        <select class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <option value="">Todas as categorias</option>
+          <option value="alimentacao">Alimentação</option>
+          <option value="transporte">Transporte</option>
+          <option value="saude">Saúde</option>
+          <option value="lazer">Lazer</option>
+          <option value="utilitarios">Utilitários</option>
+        </select>
+        
+        <!-- Botão Limpar -->
+        <button class="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+          Limpar
+        </button>
+      </div>
+    </section>
+
+    <!-- ========================================================================== -->
+    <!-- SEÇÃO 4: LISTA DE TRANSAÇÕES -->
+    <!-- ========================================================================== -->
+    <section>
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-gray-900">Transações Recentes</h3>
+        <a href="#" class="text-sm text-blue-600 hover:text-blue-700">Ver mais →</a>
+      </div>
+
+      <div class="space-y-2">
+        
+        <!-- Transação: Supermercado (Saída) -->
+        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:shadow-md transition cursor-pointer">
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <p class="font-semibold text-gray-900">Supermercado Extra</p>
+              <p class="text-sm text-gray-500">Alimentação • Ontem às 18:30</p>
+            </div>
+            <p class="text-lg font-bold text-red-600 ml-4">-R$ 85,50</p>
+          </div>
+        </div>
+
+        <!-- Transação: Netflix (Saída) -->
+        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:shadow-md transition cursor-pointer">
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <p class="font-semibold text-gray-900">Netflix</p>
+              <p class="text-sm text-gray-500">Lazer • 03/03</p>
+            </div>
+            <p class="text-lg font-bold text-red-600 ml-4">-R$ 29,90</p>
+          </div>
+        </div>
+
+        <!-- Transação: Salário (Entrada) -->
+        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:shadow-md transition cursor-pointer">
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <p class="font-semibold text-gray-900">Salário</p>
+              <p class="text-sm text-gray-500">Renda • 01/03</p>
+            </div>
+            <p class="text-lg font-bold text-green-600 ml-4">+R$ 3.500,00</p>
+          </div>
+        </div>
+
+        <!-- Transação: Uber (Saída) -->
+        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:shadow-md transition cursor-pointer">
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <p class="font-semibold text-gray-900">Uber</p>
+              <p class="text-sm text-gray-500">Transporte • 28/02</p>
+            </div>
+            <p class="text-lg font-bold text-red-600 ml-4">-R$ 23,40</p>
+          </div>
+        </div>
+
+        <!-- Transação: Freelance (Entrada) -->
+        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:shadow-md transition cursor-pointer">
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <p class="font-semibold text-gray-900">Projeto Freelance</p>
+              <p class="text-sm text-gray-500">Renda • 25/02</p>
+            </div>
+            <p class="text-lg font-bold text-green-600 ml-4">+R$ 1.200,00</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================== -->
+    <!-- SEÇÃO 5: GRÁFICO SIMPLES (Categorias) -->
+    <!-- ========================================================================== -->
+    <section class="bg-white p-6 rounded-lg border border-gray-200">
+      <h3 class="text-lg font-bold text-gray-900 mb-4">Gastos por Categoria</h3>
+      
+      <div class="space-y-4">
+        
+        <!-- Categoria: Alimentação -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <p class="text-sm font-semibold text-gray-700">Alimentação</p>
+            <p class="text-sm font-bold text-gray-900">R$ 520,00 (35%)</p>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-blue-600 h-2 rounded-full" style="width: 35%"></div>
+          </div>
+        </div>
+
+        <!-- Categoria: Transporte -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <p class="text-sm font-semibold text-gray-700">Transporte</p>
+            <p class="text-sm font-bold text-gray-900">R$ 280,00 (19%)</p>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-green-600 h-2 rounded-full" style="width: 19%"></div>
+          </div>
+        </div>
+
+        <!-- Categoria: Lazer -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <p class="text-sm font-semibold text-gray-700">Lazer</p>
+            <p class="text-sm font-bold text-gray-900">R$ 420,00 (28%)</p>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-purple-600 h-2 rounded-full" style="width: 28%"></div>
+          </div>
+        </div>
+
+        <!-- Categoria: Utilitários -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <p class="text-sm font-semibold text-gray-700">Utilitários</p>
+            <p class="text-sm font-bold text-gray-900">R$ 230,00 (15%)</p>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-orange-600 h-2 rounded-full" style="width: 15%"></div>
+          </div>
+        </div>
+
+        <!-- Categoria: Saúde -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <p class="text-sm font-semibold text-gray-700">Saúde</p>
+            <p class="text-sm font-bold text-gray-900">R$ 100,00 (7%)</p>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-red-600 h-2 rounded-full" style="width: 7%"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================================ -->
+  <!-- MODAL: ADICIONAR TRANSAÇÃO -->
+  <!-- ============================================================================ -->
+  <div id="modalTransacao" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+      
+      <!-- Header -->
+      <div class="border-b px-6 py-4 flex items-center justify-between">
+        <h2 class="text-xl font-bold text-gray-900">Nova Transação</h2>
+        <button class="text-gray-500 hover:text-gray-700">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <form class="p-6 space-y-4">
+        
+        <!-- Tipo (Entrada/Saída) -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-3">Tipo</label>
+          <div class="flex gap-3">
+            <button type="button" class="flex-1 py-2 px-4 rounded-lg border-2 border-green-500 bg-green-50 text-green-600 font-semibold hover:bg-green-100 transition">
+              Entrada
+            </button>
+            <button type="button" class="flex-1 py-2 px-4 rounded-lg border-2 border-gray-300 text-gray-600 font-semibold hover:border-gray-400 transition">
+              Saída
+            </button>
+          </div>
+        </div>
+
+        <!-- Valor (Campo Principal) -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Valor</label>
+          <input 
+            type="number" 
+            placeholder="0,00" 
+            autofocus
+            step="0.01"
+            class="w-full px-4 py-3 text-2xl font-bold border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+        </div>
+
+        <!-- Categoria -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Categoria</label>
+          <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="">Selecionar categoria</option>
+            <option value="alimentacao">Alimentação</option>
+            <option value="transporte">Transporte</option>
+            <option value="saude">Saúde</option>
+            <option value="lazer">Lazer</option>
+            <option value="utilitarios">Utilitários</option>
+          </select>
+        </div>
+
+        <!-- Data -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Data</label>
+          <input 
+            type="date" 
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+        </div>
+
+        <!-- Descrição (Opcional) -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Descrição (opcional)</label>
+          <input 
+            type="text" 
+            placeholder="Ex: Almocei na pizzaria"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+        </div>
+
+        <!-- Ações -->
+        <div class="flex gap-3 pt-4 border-t">
+          <button type="button" class="flex-1 py-2 px-4 border border-gray-300 rounded-lg text-gray-600 font-semibold hover:bg-gray-50 transition">
+            Cancelar
+          </button>
+          <button type="submit" class="flex-1 py-2 px-4 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition">
+            Salvar
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================================ -->
+  <!-- FAB: BOTÃO FLUTUANTE (Sempre Acessível) -->
+  <!-- ============================================================================ -->
+  <button 
+    onclick="document.getElementById('modalTransacao').classList.toggle('hidden')"
+    class="fixed bottom-6 right-6 w-14 h-14 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition flex items-center justify-center z-40"
+    title="Adicionar transação"
+  >
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+    </svg>
+  </button>
+
+  <!-- ============================================================================ -->
+  <!-- SCRIPT BÁSICO -->
+  <!-- ============================================================================ -->
+  <script>
+    // Toggle sidebar no mobile
+    document.querySelectorAll('button').forEach(btn => {
+      if (btn.innerHTML.includes('M4 6h16')) {
+        btn.addEventListener('click', () => {
+          // Lógica de toggle sidebar
+          console.log('Menu toggle');
+        });
+      }
+    });
+
+    // Exemplo: Atualizar saldo em tempo real (AJAX/fetch)
+    function atualizarFiltros(tipo, valor) {
+      console.log(`Filtro ${tipo}: ${valor}`);
+      // Aqui você faria um fetch para atualizar os dados
+    }
+
+    // Fechar modal ao clicar fora
+    document.getElementById('modalTransacao').addEventListener('click', (e) => {
+      if (e.target.id === 'modalTransacao') {
+        e.target.classList.add('hidden');
+      }
+    });
+  </script>
+
+</body>
+</html>

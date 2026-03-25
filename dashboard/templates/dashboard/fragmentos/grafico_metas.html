@@ -1,0 +1,59 @@
+<div id="chart-metas"></div>
+<script>
+  (function () {
+    var options = {
+      series: {{ dados.valores|safe }},
+      labels: {{ dados.labels|safe }},
+      chart: {
+        type: 'donut',
+        height: 220,
+        background: 'transparent',
+        animations: { enabled: true, easing: 'easeinout', speed: 600 }
+      },
+      theme: { mode: 'dark' },
+      stroke: { show: false },
+      colors: ['#4ADE80', '#60A5FA', '#FBBF24', '#A78BFA', '#FB923C'],
+      legend: {
+        position: 'bottom',
+        labels: { colors: '#94a3b8' },
+        markers: { radius: 4 }
+      },
+      plotOptions: {
+        pie: {
+          donut: {
+            size: '65%',
+            labels: {
+              show: true,
+              total: {
+                show: true,
+                label: 'Média',
+                color: '#94a3b8',
+                fontSize: '12px',
+                fontWeight: 500,
+                formatter: function(w) {
+                  var total = w.globals.seriesTotals.reduce(function (a, b) { return a + b; }, 0);
+                  var count = w.globals.seriesTotals.length;
+                  return (count > 0 ? (total / count).toFixed(0) : 0) + '%';
+                }
+              }
+            }
+          }
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: function(val) { return val.toFixed(0) + '%'; },
+        style: { colors: ['#0f172a'], fontSize: '11px', fontWeight: 600 },
+        dropShadow: { enabled: false }
+      },
+      tooltip: {
+        theme: 'dark',
+        y: { formatter: function(v) { return v + '%'; } }
+      }
+    };
+
+    if (window.chartMetas) { window.chartMetas.destroy(); }
+    window.chartMetas = new ApexCharts(document.getElementById('chart-metas'), options);
+    window.chartMetas.render();
+  })();
+</script>
