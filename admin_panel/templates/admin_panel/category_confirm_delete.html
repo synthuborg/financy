@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Excluir categoria | Admin FinTrack{% endblock %}
+
+{% block content %}
+<div class="px-4 py-6 md:px-6 md:py-8 max-w-lg mx-auto">
+
+  <div class="glass rounded-2xl p-6">
+    <!-- Icon -->
+    <div class="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center mx-auto mb-4">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+    </div>
+
+    <h1 class="text-lg font-bold text-white text-center mb-2">Tem certeza que deseja excluir esta categoria?</h1>
+    <p class="text-zinc-400 text-sm text-center mb-6">Esta ação não pode ser desfeita.</p>
+
+    <!-- Category details -->
+    <div class="bg-zinc-900/50 rounded-xl p-4 mb-6 space-y-2">
+      <div class="flex justify-between text-sm">
+        <span class="text-zinc-400">Nome</span>
+        <span class="text-white font-medium">{{ object.nome }}</span>
+      </div>
+      <div class="flex justify-between text-sm">
+        <span class="text-zinc-400">Tipo</span>
+        <span class="{% if object.tipo == 'entrada' %}text-emerald-400{% else %}text-red-400{% endif %} font-medium">
+          {% if object.tipo == 'entrada' %}Entrada{% else %}Saída{% endif %}
+        </span>
+      </div>
+      <div class="flex justify-between text-sm">
+        <span class="text-zinc-400">Usuário</span>
+        <span class="text-zinc-300">{{ object.usuario.username|default:"Sistema" }}</span>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <form method="post" class="flex items-center gap-3">
+      {% csrf_token %}
+      <a href="{% url 'admin_panel:category_list' %}"
+        class="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500">
+        Cancelar
+      </a>
+      <button type="submit"
+        class="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
+        Excluir
+      </button>
+    </form>
+  </div>
+
+</div>
+{% endblock %}
