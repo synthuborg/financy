@@ -39,11 +39,38 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+              mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace']
+            }
+          }
+        }
+      }
+    </script>
     <style>
+      @theme {
+        --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+        --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+      }
+      
+      :root {
+        --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+        --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+      }
+      
       body {
-        font-family: 'Inter', ui-sans-serif, system-ui;
+        font-family: var(--font-sans);
+      }
+      
+      .font-mono {
+        font-family: var(--font-mono);
       }
       
       :root {
@@ -110,14 +137,14 @@
         <span data-theme-toggle-label>Escuro</span>
       </button>
       <!-- Orbs de fundo -->
-      <div class="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-violet-600/20 blur-3xl pointer-events-none"></div>
+      <div class="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-emerald-500/20 blur-3xl pointer-events-none"></div>
       <div class="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-emerald-500/15 blur-3xl pointer-events-none"></div>
 
       <div class="relative w-full max-w-md px-4">
         <!-- Logo -->
         <div class="text-center mb-8">
           <div class="inline-flex items-center space-x-2 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-emerald-500 flex items-center justify-center">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-500 flex items-center justify-center">
               <span class="text-white font-bold">F</span>
             </div>
             <span class="text-2xl font-bold text-white">FinTrack</span>
@@ -129,8 +156,8 @@
         <!-- Formulário -->
         <div class="glass rounded-2xl p-8">
           {% if form.errors %}
-            <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-4 mb-6" role="alert">
-              <p class="text-red-400 text-sm">Usuário ou senha inválidos. Tente novamente.</p>
+            <div class="bg-rose-500/10 border border-rose-500/30 rounded-xl p-4 mb-6" role="alert">
+              <p class="text-rose-400 text-sm">Usuário ou senha inválidos. Tente novamente.</p>
             </div>
           {% endif %}
 
@@ -141,21 +168,21 @@
             <!-- Usuário -->
             <div>
               <label for="id_username" class="block text-zinc-300 text-sm font-medium mb-2">Usuário</label>
-              <input type="text" name="username" id="id_username" autocomplete="username" required class="w-full bg-zinc-900/50 border border-zinc-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent placeholder-zinc-500 transition-all" placeholder="Seu nome de usuário" />
+              <input type="text" name="username" id="id_username" autocomplete="username" required class="w-full bg-zinc-900/50 border border-zinc-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent placeholder-zinc-500 transition-all" placeholder="Seu nome de usuário" />
             </div>
 
             <!-- Senha -->
             <div>
               <label for="id_password" class="block text-zinc-300 text-sm font-medium mb-2">Senha</label>
-              <input type="password" name="password" id="id_password" autocomplete="current-password" required class="w-full bg-zinc-900/50 border border-zinc-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent placeholder-zinc-500 transition-all" placeholder="••••••••" />
+              <input type="password" name="password" id="id_password" autocomplete="current-password" required class="w-full bg-zinc-900/50 border border-zinc-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent placeholder-zinc-500 transition-all" placeholder="••••••••" />
             </div>
 
-            <button type="submit" class="w-full bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-500 hover:to-violet-400 text-white font-semibold py-3 rounded-xl transition-all shadow-lg shadow-violet-500/20 mt-2">Entrar</button>
+            <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-semibold transition-all duration-200 shadow-md shadow-emerald-500/25 mt-2">Entrar</button>
           </form>
 
           <p class="text-center text-zinc-500 text-sm mt-6">
             Não tem conta?
-            <a href="{% url 'accounts:register' %}" class="text-violet-400 hover:text-violet-300 font-medium transition-colors">Criar conta gratuita</a>
+            <a href="{% url 'accounts:register' %}" class="text-emerald-400 hover:text-emerald-300 font-medium transition-colors">Criar conta gratuita</a>
           </p>
         </div>
 

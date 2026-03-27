@@ -93,7 +93,7 @@ Use [padrão de layout principal](./assets/dashboard-template.html):
   </aside>
 
   <!-- Main Content -->
-  <main class="lg:ml-64 max-w-7xl mx-auto px-4 py-6">
+  <main class="lg:ml-64 '' mx-auto px-4 py-6">
     <!-- Dashboard, páginas, etc -->
   </main>
 

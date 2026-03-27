@@ -2,7 +2,7 @@
 {% block title %}Metas — FinTrack{% endblock %}
 {% block content %}
 <div class="min-h-screen bg-zinc-950 py-8 px-4">
-  <div class="max-w-7xl mx-auto">
+  <div class="'' mx-auto">
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
       <div>
@@ -10,7 +10,7 @@
         <p class="text-zinc-400 text-sm mt-1">Acompanhe seu progresso rumo aos seus objetivos</p>
       </div>
       <a href="{% url 'finances:goal_create' %}"
-        class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-medium px-5 py-2.5 rounded-xl transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-violet-500">
+        class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-5 py-2.5 rounded-xl transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
           stroke-width="2" aria-hidden="true">
           <line x1="12" y1="5" x2="12" y2="19" />
@@ -30,7 +30,7 @@
             <h3 class="font-semibold text-white truncate">{{ meta.titulo }}</h3>
             {% if meta.categoria %}
             <span
-              class="inline-flex mt-1 px-2 py-0.5 rounded-full text-xs font-medium bg-violet-500/10 text-violet-400">
+              class="inline-flex mt-1 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400">
               {{ meta.categoria.nome }}
             </span>
             {% endif %}
@@ -38,7 +38,7 @@
           <div
             class="flex items-center gap-1 flex-shrink-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
             <a href="{% url 'finances:goal_update' meta.pk %}" aria-label="Editar meta {{ meta.titulo }}"
-              class="p-1.5 rounded-lg text-zinc-400 hover:text-violet-400 hover:bg-violet-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500">
+              class="p-1.5 rounded-lg text-zinc-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600">
               <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 aria-hidden="true">
                 <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
@@ -46,7 +46,7 @@
               </svg>
             </a>
             <a href="{% url 'finances:goal_delete' meta.pk %}" aria-label="Excluir meta {{ meta.titulo }}"
-              class="p-1.5 rounded-lg text-zinc-400 hover:text-red-400 hover:bg-red-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
+              class="p-1.5 rounded-lg text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
               <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 aria-hidden="true">
                 <polyline points="3 6 5 6 21 6" />
@@ -64,7 +64,7 @@
             <span class="text-sm text-zinc-400">Progresso</span>
             <span class="text-sm font-bold
               {% if meta.percentual_concluido >= 100 %}text-emerald-400
-              {% elif meta.percentual_concluido >= 50 %}text-violet-400
+              {% elif meta.percentual_concluido >= 50 %}text-emerald-400
               {% else %}text-zinc-300{% endif %}">
               {{ meta.percentual_concluido }}%
             </span>
@@ -74,8 +74,8 @@
             aria-label="Progresso da meta {{ meta.titulo }}">
             <div class="h-full rounded-full transition-all duration-500
               {% if meta.percentual_concluido >= 100 %}bg-emerald-500
-              {% elif meta.percentual_concluido >= 50 %}bg-violet-500
-              {% else %}bg-blue-500{% endif %}" style="width: {{ meta.percentual_concluido }}%">
+              {% elif meta.percentual_concluido >= 50 %}bg-emerald-400
+              {% else %}bg-zinc-600{% endif %}" style="width: {{ meta.percentual_concluido }}%">
             </div>
           </div>
           <div class="flex items-center justify-between mt-2">
@@ -102,9 +102,9 @@
             {% csrf_token %}
             <label for="valor-meta-{{ meta.pk }}" class="sr-only">Valor a depositar para {{ meta.titulo }}</label>
             <input type="number" id="valor-meta-{{ meta.pk }}" name="valor" step="0.01" min="0.01" placeholder="R$ 0,00"
-              class="flex-1 bg-zinc-800/50 border border-zinc-700 text-white rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-violet-500 placeholder-zinc-600">
+              class="flex-1 bg-zinc-800/50 border border-zinc-700 text-white rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-zinc-600 placeholder-zinc-600">
             <button type="submit"
-              class="px-3 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-xs font-medium transition-colors whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-violet-500">
+              class="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-medium transition-colors whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-zinc-600">
               + Depositar
             </button>
             </form>
@@ -116,9 +116,9 @@
 
     {% else %}
     <div class="glass rounded-2xl p-12 text-center">
-      <div class="w-16 h-16 bg-violet-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4"
+      <div class="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4"
         aria-hidden="true">
-        <svg class="w-8 h-8 text-violet-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <svg class="w-8 h-8 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <circle cx="12" cy="12" r="10" />
           <polyline points="12 6 12 12 16 14" />
         </svg>
@@ -126,7 +126,7 @@
       <h3 class="text-lg font-semibold text-white mb-2">Nenhuma meta criada ainda</h3>
       <p class="text-zinc-400 text-sm mb-6">Defina objetivos financeiros e acompanhe seu progresso</p>
       <a href="{% url 'finances:goal_create' %}"
-        class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-medium px-6 py-3 rounded-xl transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-violet-500">
+        class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-6 py-3 rounded-xl transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600">
         Criar Primeira Meta
       </a>
     </div>

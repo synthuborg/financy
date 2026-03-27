@@ -152,7 +152,7 @@ Guia para garantir que a interface é verdadeiramente mobile-first com responsiv
 </aside>
 
 <!-- Main (responsiva) -->
-<main class="lg:ml-64 max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-6">
+<main class="lg:ml-64 '' mx-auto px-4 md:px-6 lg:px-8 py-6">
   <!-- Conteúdo adaptativo -->
 </main>
 ```
@@ -358,7 +358,7 @@ Em cada breakpoint:
 ## Exemplo Completo: Dashboard Responsivo
 
 ```html
-<main class="lg:ml-64 max-w-7xl mx-auto px-4 py-6">
+<main class="lg:ml-64 '' mx-auto px-4 py-6">
   
   <!-- Seção 1: Saldo -->
   <section class="bg-blue-600 text-white rounded-lg p-6 mb-6">

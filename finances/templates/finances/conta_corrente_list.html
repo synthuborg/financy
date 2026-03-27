@@ -2,7 +2,7 @@
 {% block title %}Contas Correntes — FinTrack{% endblock %}
 {% block content %}
 <div class="min-h-screen bg-zinc-950 py-8 px-4">
-  <div class="max-w-7xl w-full mx-auto">
+  <div class="'' w-full mx-auto">
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
       <div>
@@ -10,7 +10,7 @@
         <p class="text-zinc-400 text-sm mt-1">Gerencie suas contas correntes e carteiras</p>
       </div>
       <a href="{% url 'finances:conta_corrente_create' %}"
-        class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-medium px-5 py-2.5 rounded-xl transition-colors text-sm">
+        class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-5 py-2.5 rounded-xl transition-colors text-sm">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
           stroke-width="2" aria-hidden="true">
           <line x1="12" y1="5" x2="12" y2="19" />
@@ -51,7 +51,7 @@
               <p class="font-semibold text-white truncate">{{ conta.nome }}</p>
               <p class="text-xs text-zinc-400 mt-0.5">{{ conta.get_tipo_display }}</p>
               <!-- Saldo da conta -->
-              <p class="text-sm font-bold mt-2 {% if saldo >= 0 %}text-green-400{% else %}text-red-400{% endif %}"
+              <p class="text-sm font-bold mt-2 {% if saldo >= 0 %}text-green-400{% else %}text-rose-400{% endif %}"
                 aria-label="Saldo: R$ {{ saldo|floatformat:"2g" }}">
                 R$ {{ saldo|floatformat:"2g" }}
               </p>
@@ -60,7 +60,7 @@
           <div
             class="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity shrink-0">
             <a href="{% url 'finances:conta_corrente_update' conta.pk %}" aria-label="Editar conta {{ conta.nome }}"
-              class="p-1.5 rounded-lg text-zinc-400 hover:text-violet-400 hover:bg-violet-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500">
+              class="p-1.5 rounded-lg text-zinc-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600">
               <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 aria-hidden="true">
                 <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
@@ -68,7 +68,7 @@
               </svg>
             </a>
             <a href="{% url 'finances:conta_corrente_delete' conta.pk %}" aria-label="Excluir conta {{ conta.nome }}"
-              class="p-1.5 rounded-lg text-zinc-400 hover:text-red-400 hover:bg-red-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
+              class="p-1.5 rounded-lg text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
               <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 aria-hidden="true">
                 <polyline points="3 6 5 6 21 6" />
@@ -91,7 +91,7 @@
                 <span class="text-zinc-300 truncate">{{ t.descricao }}</span>
                 <span class="text-zinc-600 shrink-0">{{ t.data|date:"d/m/Y" }}</span>
               </div>
-              <span class="shrink-0 font-medium {% if t.tipo == 'entrada' %}text-emerald-400{% else %}text-red-400{% endif %}">
+              <span class="shrink-0 font-medium {% if t.tipo == 'entrada' %}text-emerald-400{% else %}text-rose-400{% endif %}">
                 {% if t.tipo == 'entrada' %}+{% else %}−{% endif %}R$&nbsp;{{ t.valor|floatformat:"2g" }}
               </span>
             </li>
@@ -119,7 +119,7 @@
       <h3 class="text-lg font-semibold text-white mb-2">Nenhuma conta corrente ainda</h3>
       <p class="text-zinc-400 text-sm mb-6">Cadastre suas contas para controlar seu saldo</p>
       <a href="{% url 'finances:conta_corrente_create' %}"
-        class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-medium px-6 py-3 rounded-xl transition-colors text-sm">
+        class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-6 py-3 rounded-xl transition-colors text-sm">
         Criar Primeira Conta
       </a>
     </div>

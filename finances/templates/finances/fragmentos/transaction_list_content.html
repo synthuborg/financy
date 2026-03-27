@@ -21,7 +21,7 @@
 
                   {% else %}
                     
-                    bg-red-500/10
+                    bg-rose-500/10
 
                   {% endif %}">
                   {% if t.tipo == 'entrada' %}
@@ -30,7 +30,7 @@
                       <polyline points="17 6 23 6 23 12" />
                     </svg>
                   {% else %}
-                    <svg class="w-5 h-5 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg class="w-5 h-5 text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <polyline points="23 18 13.5 8.5 8.5 13.5 1 6" />
                       <polyline points="17 18 23 18 23 12" />
                     </svg>
@@ -48,7 +48,7 @@
 
                         {% else %}
                           
-                          bg-red-500/10 text-red-400
+                          bg-rose-500/10 text-rose-400
 
                         {% endif %}">
                         {{ t.categoria.nome }}
@@ -73,7 +73,7 @@
 
                   {% else %}
                     
-                    bg-red-500/10 text-red-400
+                    bg-rose-500/10 text-rose-400
 
                   {% endif %}">
                   {{ t.categoria.nome }}
@@ -99,7 +99,7 @@
 
                 {% else %}
                   
-                  text-red-400
+                  text-rose-400
 
                 {% endif %}">
                 {% if t.tipo == 'entrada' %}
@@ -109,13 +109,13 @@
                 {% endif %}R$ {{ t.valor|floatformat:'2g' }}
               </span>
               <div class="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                <a href="{% url 'finances:transaction_update' t.pk %}" class="p-1 rounded-lg text-zinc-400 hover:text-violet-400 hover:bg-violet-500/10 transition-colors">
+                <a href="{% url 'finances:transaction_update' t.pk %}" class="p-1 rounded-lg text-zinc-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
                   <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
                     <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
                   </svg>
                 </a>
-                <a href="{% url 'finances:transaction_delete' t.pk %}" class="p-1 rounded-lg text-zinc-400 hover:text-red-400 hover:bg-red-500/10 transition-colors">
+                <a href="{% url 'finances:transaction_delete' t.pk %}" class="p-1 rounded-lg text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors">
                   <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="3 6 5 6 21 6" />
                     <path d="M19 6l-1 14H6L5 6" />
@@ -174,14 +174,14 @@
   {% endif %}
 {% else %}
   <div class="glass rounded-2xl p-12 text-center">
-    <div class="w-16 h-16 bg-violet-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-      <svg class="w-8 h-8 text-violet-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <div class="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+      <svg class="w-8 h-8 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <rect x="2" y="5" width="20" height="14" rx="2" />
         <line x1="2" y1="10" x2="22" y2="10" />
       </svg>
     </div>
     <h3 class="text-lg font-semibold text-white mb-2">Nenhuma transação ainda</h3>
     <p class="text-zinc-400 text-sm mb-6">Registre sua primeira entrada ou saída para começar</p>
-    <a href="{% url 'finances:transaction_create' %}" class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-medium px-6 py-3 rounded-xl transition-colors text-sm">Registrar Primeira Transação</a>
+    <a href="{% url 'finances:transaction_create' %}" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-6 py-3 rounded-xl transition-colors text-sm">Registrar Primeira Transação</a>
   </div>
 {% endif %}

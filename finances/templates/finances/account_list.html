@@ -2,7 +2,7 @@
 {% block title %}Contas — FinTrack{% endblock %}
 {% block content %}
 <div class="min-h-screen bg-zinc-950 py-8 px-4">
-  <div class="max-w-7xl w-full mx-auto">
+  <div class="'' w-full mx-auto">
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
       <div>
@@ -10,7 +10,7 @@
         <p class="text-zinc-400 text-sm mt-1">Gerencie suas contas e carteiras</p>
       </div>
       <a href="{% url 'finances:account_create' %}"
-        class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-medium px-5 py-2.5 rounded-xl transition-colors text-sm">
+        class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-5 py-2.5 rounded-xl transition-colors text-sm">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
           stroke-width="2" aria-hidden="true">
           <line x1="12" y1="5" x2="12" y2="19" />
@@ -28,11 +28,11 @@
           <div class="flex items-center gap-3">
             <!-- Ícone por tipo -->
             <div class="w-10 h-10 rounded-xl flex items-center justify-center
-              {% if conta.tipo == 'cartao_credito' %}bg-violet-500/10
+              {% if conta.tipo == 'cartao_credito' %}bg-emerald-500/10
               {% elif conta.tipo == 'carteira' %}bg-emerald-500/10
               {% else %}bg-blue-500/10{% endif %}" aria-hidden="true">
               {% if conta.tipo == 'cartao_credito' %}
-              <svg class="w-5 h-5 text-violet-400" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              <svg class="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="2" aria-hidden="true">
                 <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
                 <line x1="1" y1="10" x2="23" y2="10" />
@@ -61,7 +61,7 @@
           </div>
           <div class="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
             <a href="{% url 'finances:account_update' conta.pk %}" aria-label="Editar conta {{ conta.nome }}"
-              class="p-1.5 rounded-lg text-zinc-400 hover:text-violet-400 hover:bg-violet-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500">
+              class="p-1.5 rounded-lg text-zinc-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600">
               <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 aria-hidden="true">
                 <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
@@ -69,7 +69,7 @@
               </svg>
             </a>
             <a href="{% url 'finances:account_delete' conta.pk %}" aria-label="Excluir conta {{ conta.nome }}"
-              class="p-1.5 rounded-lg text-zinc-400 hover:text-red-400 hover:bg-red-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
+              class="p-1.5 rounded-lg text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500">
               <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 aria-hidden="true">
                 <polyline points="3 6 5 6 21 6" />
@@ -86,9 +86,9 @@
 
     {% else %}
     <div class="glass rounded-2xl p-12 text-center">
-      <div class="w-16 h-16 bg-violet-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4"
+      <div class="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4"
         aria-hidden="true">
-        <svg class="w-8 h-8 text-violet-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <svg class="w-8 h-8 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
           <line x1="1" y1="10" x2="23" y2="10" />
         </svg>
@@ -96,7 +96,7 @@
       <h3 class="text-lg font-semibold text-white mb-2">Nenhuma conta ainda</h3>
       <p class="text-zinc-400 text-sm mb-6">Cadastre suas contas para associar transações</p>
       <a href="{% url 'finances:account_create' %}"
-        class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-medium px-6 py-3 rounded-xl transition-colors text-sm">
+        class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-6 py-3 rounded-xl transition-colors text-sm">
         Criar Primeira Conta
       </a>
     </div>

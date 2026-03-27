@@ -19,20 +19,20 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div class="sm:col-span-2">
             <label for="{{ form.titulo.id_for_label }}" class="block text-sm font-medium text-zinc-300 mb-2">
-              Título <span class="text-red-400" aria-hidden="true">*</span>
+              Título <span class="text-rose-400" aria-hidden="true">*</span>
             </label>
             {{ form.titulo }}
             {% if form.titulo.errors %}
-            <p class="mt-1.5 text-xs text-red-400" role="alert">{{ form.titulo.errors.0 }}</p>
+            <p class="mt-1.5 text-xs text-rose-400" role="alert">{{ form.titulo.errors.0 }}</p>
             {% endif %}
           </div>
           <div>
             <label for="{{ form.valor_alvo.id_for_label }}" class="block text-sm font-medium text-zinc-300 mb-2">
-              Valor Alvo (R$) <span class="text-red-400" aria-hidden="true">*</span>
+              Valor Alvo (R$) <span class="text-rose-400" aria-hidden="true">*</span>
             </label>
             {{ form.valor_alvo }}
             {% if form.valor_alvo.errors %}
-            <p class="mt-1.5 text-xs text-red-400" role="alert">{{ form.valor_alvo.errors.0 }}</p>
+            <p class="mt-1.5 text-xs text-rose-400" role="alert">{{ form.valor_alvo.errors.0 }}</p>
             {% endif %}
           </div>
           <div>
@@ -41,7 +41,7 @@
             </label>
             {{ form.prazo }}
             {% if form.prazo.errors %}
-            <p class="mt-1.5 text-xs text-red-400" role="alert">{{ form.prazo.errors.0 }}</p>
+            <p class="mt-1.5 text-xs text-rose-400" role="alert">{{ form.prazo.errors.0 }}</p>
             {% endif %}
           </div>
           <div class="sm:col-span-2">
@@ -50,20 +50,20 @@
             </label>
             {{ form.categoria }}
             {% if form.categoria.errors %}
-            <p class="mt-1.5 text-xs text-red-400" role="alert">{{ form.categoria.errors.0 }}</p>
+            <p class="mt-1.5 text-xs text-rose-400" role="alert">{{ form.categoria.errors.0 }}</p>
             {% endif %}
           </div>
         </div>
         {% if form.non_field_errors %}
-        <div class="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl" role="alert">
+        <div class="mt-4 p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl" role="alert">
           {% for error in form.non_field_errors %}
-          <p class="text-sm text-red-400">{{ error }}</p>
+          <p class="text-sm text-rose-400">{{ error }}</p>
           {% endfor %}
         </div>
         {% endif %}
         <div class="flex flex-col sm:flex-row gap-3 mt-8">
           <button type="submit"
-            class="flex-1 bg-violet-600 hover:bg-violet-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-violet-500">
+            class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600">
             {{ btn_label }}
           </button>
           <a href="{% url 'finances:goal_list' %}"

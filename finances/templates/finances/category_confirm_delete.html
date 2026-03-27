@@ -7,8 +7,8 @@
   <div class="w-full max-w-md">
     <div class="glass rounded-2xl p-8 text-center">
 
-      <div class="w-16 h-16 bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-        <svg class="w-8 h-8 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <div class="w-16 h-16 bg-rose-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+        <svg class="w-8 h-8 text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
           <line x1="12" y1="9" x2="12" y2="13" />
           <line x1="12" y1="17" x2="12.01" y2="17" />
@@ -22,7 +22,7 @@
         <p class="font-semibold text-white">{{ object.nome }}</p>
         <span
           class="inline-flex items-center mt-1 px-2 py-0.5 rounded-full text-xs font-medium
-          {% if object.tipo == 'entrada' %}bg-emerald-500/10 text-emerald-400{% else %}bg-red-500/10 text-red-400{% endif %}">
+          {% if object.tipo == 'entrada' %}bg-emerald-500/10 text-emerald-400{% else %}bg-rose-500/10 text-rose-400{% endif %}">
           {% if object.tipo == 'entrada' %}Entrada{% else %}Saída{% endif %}
         </span>
       </div>

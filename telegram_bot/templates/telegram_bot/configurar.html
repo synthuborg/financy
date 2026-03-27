@@ -5,52 +5,52 @@
 {% endblock %}
 
 {% block content %}
-  <div class="flex-1 px-4 py-6 md:px-6 md:py-8 max-w-5xl w-full mx-auto">
+  <div class="flex-1 px-4 py-6 md:px-6 md:py-8 w-full mx-auto">
     <header class="mb-8">
-      <h1 class="text-2xl md:text-3xl font-bold text-slate-50 mb-2">Conectar Bot do Telegram</h1>
-      <p class="text-sm text-slate-400">Configure seu bot para criar transações por mensagem.</p>
+      <h1 class="text-2xl md:text-3xl font-bold text-zinc-100 mb-2">Conectar Bot do Telegram</h1>
+      <p class="text-sm text-zinc-400">Configure seu bot para criar transações por mensagem.</p>
     </header>
 
     {% if telegram_config %}
-      <section class="bg-slate-800 rounded-2xl border border-slate-700/50 p-6 mb-6">
+      <section class="bg-zinc-950 rounded-2xl border border-zinc-800/60 p-6 mb-6">
         <h2 class="text-lg font-semibold text-emerald-400 mb-2">Bot conectado</h2>
-        <p class="text-slate-300 mb-1">@{{ telegram_config.bot_username }}</p>
-        <p class="text-xs text-slate-500 mb-4">Chat ID armazenado como hash e credenciais protegidas.</p>
+        <p class="text-zinc-300 mb-1">@{{ telegram_config.bot_username }}</p>
+        <p class="text-xs text-zinc-500 mb-4">Chat ID armazenado como hash e credenciais protegidas.</p>
         <button type="button" id="btn-disconnect" class="px-4 py-2 rounded-xl bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors">Desconectar bot</button>
       </section>
     {% endif %}
 
-    <section class="bg-slate-800 rounded-2xl border border-slate-700/50 p-6 space-y-6">
-      <article class="border border-slate-700 rounded-xl p-4">
-        <h3 class="font-medium text-slate-200 mb-2">Passo 1 - Criar bot no @BotFather</h3>
-        <ol class="text-sm text-slate-400 space-y-1 list-decimal pl-4">
+    <section class="bg-zinc-950 rounded-2xl border border-zinc-800/60 p-6 space-y-6">
+      <article class="border border-zinc-800 rounded-xl p-4">
+        <h3 class="font-medium text-zinc-200 mb-2">Passo 1 - Criar bot no @BotFather</h3>
+        <ol class="text-sm text-zinc-400 space-y-1 list-decimal pl-4">
           <li>Abra o Telegram e procure por @BotFather.</li>
           <li>Envie /newbot e siga as instruções.</li>
           <li>Copie o token gerado.</li>
         </ol>
       </article>
 
-      <article class="border border-slate-700 rounded-xl p-4">
-        <h3 class="font-medium text-slate-200 mb-3">Passo 2 - Validar token</h3>
+      <article class="border border-zinc-800 rounded-xl p-4">
+        <h3 class="font-medium text-zinc-200 mb-3">Passo 2 - Validar token</h3>
         <div class="flex flex-col md:flex-row gap-3">
-          <input id="bot-token" type="text" class="flex-1 rounded-xl bg-slate-900 border border-slate-700 px-4 py-2 text-slate-200" placeholder="Cole o token" />
-          <button id="btn-validar" type="button" class="px-4 py-2 rounded-xl bg-sky-500 text-slate-900 font-medium hover:bg-sky-400">Validar</button>
+          <input id="bot-token" type="text" class="flex-1 rounded-xl bg-black border border-zinc-800 px-4 py-2 text-zinc-200" placeholder="Cole o token" />
+          <button id="btn-validar" type="button" class="px-4 py-2 rounded-xl bg-emerald-500 text-white font-medium hover:bg-emerald-400">Validar</button>
         </div>
-        <p id="token-status" class="mt-2 text-sm text-slate-400"></p>
+        <p id="token-status" class="mt-2 text-sm text-zinc-400"></p>
       </article>
 
-      <article class="border border-slate-700 rounded-xl p-4">
-        <h3 class="font-medium text-slate-200 mb-3">Passo 3 - Detectar chat_id</h3>
-        <p class="text-sm text-slate-400 mb-3">Envie qualquer mensagem para seu bot e clique no botão abaixo.</p>
-        <button id="btn-chat-id" type="button" class="px-4 py-2 rounded-xl bg-sky-500 text-slate-900 font-medium hover:bg-sky-400">Detectar chat_id</button>
-        <p id="chat-status" class="mt-2 text-sm text-slate-400"></p>
+      <article class="border border-zinc-800 rounded-xl p-4">
+        <h3 class="font-medium text-zinc-200 mb-3">Passo 3 - Detectar chat_id</h3>
+        <p class="text-sm text-zinc-400 mb-3">Envie qualquer mensagem para seu bot e clique no botão abaixo.</p>
+        <button id="btn-chat-id" type="button" class="px-4 py-2 rounded-xl bg-emerald-500 text-white font-medium hover:bg-emerald-400">Detectar chat_id</button>
+        <p id="chat-status" class="mt-2 text-sm text-zinc-400"></p>
       </article>
 
-      <article class="border border-slate-700 rounded-xl p-4">
-        <h3 class="font-medium text-slate-200 mb-3">Passo 4 - Webhook e salvar</h3>
-        <input id="webhook-url" type="text" class="w-full rounded-xl bg-slate-900 border border-slate-700 px-4 py-2 text-slate-200 mb-3" placeholder="https://seu-dominio.com/telegram/webhook/" />
-        <button id="btn-salvar" type="button" class="px-4 py-2 rounded-xl bg-emerald-500 text-slate-900 font-semibold hover:bg-emerald-400">Salvar e conectar</button>
-        <p id="save-status" class="mt-2 text-sm text-slate-400"></p>
+      <article class="border border-zinc-800 rounded-xl p-4">
+        <h3 class="font-medium text-zinc-200 mb-3">Passo 4 - Webhook e salvar</h3>
+        <input id="webhook-url" type="text" class="w-full rounded-xl bg-black border border-zinc-800 px-4 py-2 text-zinc-200 mb-3" placeholder="https://seu-dominio.com/telegram/webhook/" />
+        <button id="btn-salvar" type="button" class="px-4 py-2 rounded-xl bg-emerald-500 text-white font-semibold hover:bg-emerald-400">Salvar e conectar</button>
+        <p id="save-status" class="mt-2 text-sm text-zinc-400"></p>
       </article>
     </section>
   </div>

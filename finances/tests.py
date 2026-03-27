@@ -1205,6 +1205,8 @@ class TestReportView:
         url = reverse('finances:report')
         response = client_autenticado.get(url)
         assert response.status_code == 200
+        assert 'report_preview' in response.context
+        assert 'Exportar' in response.content.decode('utf-8')
 
     def test_report_requer_login(self, client):
         url = reverse('finances:report')

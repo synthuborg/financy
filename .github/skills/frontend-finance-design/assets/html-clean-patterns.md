@@ -33,7 +33,7 @@ Padrões de HTML limpo, semântico e reutilizável para o projeto de gestão fin
   </aside>
 
   <!-- Conteúdo Principal -->
-  <main class="max-w-7xl mx-auto">
+  <main class="'' mx-auto">
     <section><!-- dashboard --></section>
     <section><!-- transações --></section>
   </main>
@@ -289,7 +289,7 @@ Padrões de HTML limpo, semântico e reutilizável para o projeto de gestão fin
 #### ✓ Correto
 ```html
 <header class="sticky top-0 bg-white shadow-sm md:hidden">
-  <nav class="max-w-7xl mx-auto px-4 py-4">
+  <nav class="'' mx-auto px-4 py-4">
     <button aria-label="Menu" class="p-2">
       <svg><!-- ícone --></svg>
     </button>

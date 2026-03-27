@@ -341,7 +341,7 @@ Guia de padrões e boas práticas para usar Tailwind CSS no projeto de gestão f
 
 ```html
 <!-- Contenedor principal -->
-<div class="max-w-7xl mx-auto">
+<div class="'' mx-auto">
   Conteúdo centralizado com max width
 </div>
 

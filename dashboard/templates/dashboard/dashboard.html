@@ -5,28 +5,28 @@
 {% endblock %}
 
 {% block content %}
-  <div class="flex-1 px-4 py-6 md:px-6 md:py-8 max-w-7xl w-full mx-auto">
+  <div class="flex-1 px-4 py-6 md:px-6 md:py-8 w-full mx-auto">
     <div class="hidden" hx-ext="ws" ws-connect="/ws/dashboard/"></div>
 
     <!-- Cabeçalho da página -->
     <header class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
       <div>
-        <h1 class="text-2xl md:text-3xl font-bold text-slate-50 mb-1">Dashboard</h1>
-        <p class="text-sm text-slate-400">
+        <h1 class="text-2xl md:text-3xl font-bold text-zinc-100 mb-1">Dashboard</h1>
+        <p class="text-sm text-zinc-400">
           Olá,
-          <span class="text-slate-300 font-medium">{{ user.get_full_name|default:user.username }}</span>
+          <span class="text-zinc-300 font-medium">{{ user.get_full_name|default:user.username }}</span>
           — aqui está o seu resumo financeiro.
         </p>
       </div>
       <!-- Links rápidos -->
       <div class="flex items-center gap-3 shrink-0">
-        <a href="{% url 'finances:transaction_create' %}" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-semibold px-4 py-2.5 rounded-xl transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 min-h-[44px]">
+        <a href="{% url 'finances:transaction_create' %}" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-4 py-2.5 rounded-xl transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 min-h-[44px]">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
             <line x1="12" y1="5" x2="12" y2="19" />
             <line x1="5" y1="12" x2="19" y2="12" />
           </svg>Nova Transação
         </a>
-        <a href="{% url 'finances:transaction_list' %}" class="inline-flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium px-4 py-2.5 rounded-xl transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 min-h-[44px]">Ver todas</a>
+        <a href="{% url 'finances:transaction_list' %}" class="inline-flex items-center gap-2 bg-zinc-900 hover:bg-slate-600 text-zinc-200 font-medium px-4 py-2.5 rounded-xl transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600 min-h-[44px]">Ver todas</a>
       </div>
     </header>
 
@@ -37,23 +37,23 @@
     <!-- Gráficos -->
     <section aria-label="Gráficos" class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Evolução Financeira -->
-      <div class="bg-slate-800 rounded-2xl border border-slate-700/50 shadow-xl p-6 col-span-2">
+      <div class="bg-zinc-950 rounded-2xl border border-zinc-800/60 shadow-xl p-6 col-span-2">
         <div class="flex items-center justify-between mb-4">
-          <h2 class="text-sm font-semibold text-slate-300">Evolução Financeira</h2>
-          <span class="text-xs text-slate-500">últimos 6 meses</span>
+          <h2 class="text-sm font-semibold text-zinc-300">Evolução Financeira</h2>
+          <span class="text-xs text-zinc-500">últimos 6 meses</span>
         </div>
         <div id="dashboard-live-grafico-evolucao" hx-get="{% url 'dashboard:grafico_evolucao' %}" hx-trigger="load" hx-swap="innerHTML" aria-label="Carregando gráfico de evolução financeira">
           <div class="flex items-center justify-center h-[220px]" aria-hidden="true">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-500"></div>
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
           </div>
         </div>
       </div>
 
       <!-- Distribuição de Saídas -->
-      <div class="bg-slate-800 rounded-2xl border border-slate-700/50 shadow-xl p-6">
+      <div class="bg-zinc-950 rounded-2xl border border-zinc-800/60 shadow-xl p-6">
         <div class="flex items-center justify-between mb-4">
-          <h2 class="text-sm font-semibold text-slate-300">Distribuição de Saídas</h2>
-          <span class="text-xs text-slate-500">mês atual</span>
+          <h2 class="text-sm font-semibold text-zinc-300">Distribuição de Saídas</h2>
+          <span class="text-xs text-zinc-500">mês atual</span>
         </div>
         <div id="dashboard-live-grafico-saidas" hx-get="{% url 'dashboard:grafico_saidas' %}" hx-trigger="load" hx-swap="innerHTML" aria-label="Carregando gráfico de distribuição de saídas">
           <div class="flex items-center justify-center h-[220px]" aria-hidden="true">
@@ -63,10 +63,10 @@
       </div>
 
       <!-- Minhas Metas -->
-      <div class="bg-slate-800 rounded-2xl border border-slate-700/50 shadow-xl p-6">
+      <div class="bg-zinc-950 rounded-2xl border border-zinc-800/60 shadow-xl p-6">
         <div class="flex items-center justify-between mb-4">
-          <h2 class="text-sm font-semibold text-slate-300">Minhas Metas</h2>
-          <span class="text-xs text-slate-500">progresso</span>
+          <h2 class="text-sm font-semibold text-zinc-300">Minhas Metas</h2>
+          <span class="text-xs text-zinc-500">progresso</span>
         </div>
         <div id="dashboard-live-grafico-metas" hx-get="{% url 'dashboard:grafico_metas' %}" hx-trigger="load" hx-swap="innerHTML" aria-label="Carregando gráfico de metas">
           <div class="flex items-center justify-center h-[220px]" aria-hidden="true">
@@ -78,10 +78,10 @@
     <!-- Atividade Recente -->
     <section aria-label="Atividade recente" class="my-8">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-base font-semibold text-slate-200">Atividade Recente</h2>
+        <h2 class="text-base font-semibold text-zinc-200">Atividade Recente</h2>
         <div class="flex items-center gap-3">
-          <span class="text-xs text-slate-500">🔄 ao vivo</span>
-          <a href="{% url 'finances:transaction_list' %}" class="text-xs text-sky-400 hover:text-sky-300 transition-colors focus:outline-none focus:underline">Ver todas as transações →</a>
+          <span class="text-xs text-zinc-500">🔄 ao vivo</span>
+          <a href="{% url 'finances:transaction_list' %}" class="text-xs text-emerald-400 hover:text-emerald-300 transition-colors focus:outline-none focus:underline">Ver todas as transações →</a>
         </div>
       </div>
 

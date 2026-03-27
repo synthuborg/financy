@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
@@ -640,6 +642,34 @@ class ImportStatementView(LoginRequiredMixin, View):
 class ReportView(LoginRequiredMixin, FormView):
     template_name = 'finances/report_form.html'
     form_class = ReportFilterForm
+
+    def get_initial(self):
+        hoje = datetime.date.today()
+        return {
+            'data_inicio': hoje.replace(day=1),
+            'data_fim': hoje,
+            'formato': 'pdf',
+        }
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        form = ctx.get('form')
+        inicial = self.get_initial()
+
+        data_inicio = inicial['data_inicio']
+        data_fim = inicial['data_fim']
+
+        if getattr(form, 'is_bound', False):
+            data_inicio = form.cleaned_data.get('data_inicio') or data_inicio
+            data_fim = form.cleaned_data.get('data_fim') or data_fim
+
+        ctx['report_preview'] = finances_selectors.get_report_data(
+            self.request.user,
+            data_inicio,
+            data_fim,
+        )
+        ctx['formatos_disponiveis'] = dict(form.fields['formato'].choices)
+        return ctx
 
     def form_valid(self, form):
         data_inicio = form.cleaned_data['data_inicio']

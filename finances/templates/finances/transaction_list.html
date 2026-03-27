@@ -3,7 +3,7 @@
 {% block title %}Transações — FinTrack{% endblock %}
 
 {% block content %}
-<div x-data="{ showImportModal: false }" class="px-4 py-6 md:px-6 md:py-8 max-w-7xl w-full mx-auto">
+<div x-data="{ showImportModal: false }" class="px-4 py-6 md:px-6 md:py-8 w-full mx-auto">
   <div class="hidden" hx-ext="ws" ws-connect="/ws/dashboard/"></div>
 
   <!-- Header -->
@@ -14,7 +14,7 @@
     </div>
     <div class="flex items-center gap-2">
       <button @click="showImportModal = true"
-        class="inline-flex items-center gap-2 bg-sky-500 hover:bg-sky-600 text-slate-900 font-medium px-5 py-2.5 rounded-xl transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-sky-400">
+        class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-5 py-2.5 rounded-xl transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
           stroke-width="2" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -22,7 +22,7 @@
         Importar Extrato
       </button>
       <a href="{% url 'finances:transaction_create' %}"
-        class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-medium px-5 py-2.5 rounded-xl transition-colors text-sm">
+        class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-5 py-2.5 rounded-xl transition-colors text-sm">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
           stroke-width="2">
           <line x1="12" y1="5" x2="12" y2="19" />
@@ -45,7 +45,7 @@
     <div class="glass relative w-full max-w-md rounded-2xl p-6 z-10" @click.stop>
       <!-- Close button -->
       <button @click="showImportModal = false"
-        class="absolute top-4 right-4 p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-700/50 transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500"
+        class="absolute top-4 right-4 p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-700/50 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600"
         aria-label="Fechar">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
@@ -63,9 +63,9 @@
           <input type="file" id="id_arquivo" name="arquivo" accept=".csv,.ofx,.pdf"
             class="w-full bg-zinc-900/60 border border-zinc-700 text-zinc-100 rounded-xl px-4 py-2.5 text-sm
                    file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0
-                   file:text-sm file:font-medium file:bg-violet-500/20 file:text-violet-300
-                   hover:file:bg-violet-500/30 file:cursor-pointer
-                   focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all">
+                   file:text-sm file:font-medium file:bg-emerald-500/20 file:text-emerald-300
+                   hover:file:bg-emerald-500/30 file:cursor-pointer
+                   focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent transition-all">
         </div>
         <!-- Account select -->
         <div>
@@ -76,7 +76,7 @@
         <p class="text-xs text-zinc-500">Formatos aceitos: CSV, OFX, PDF</p>
         <!-- Submit -->
         <button type="submit"
-          class="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-500 hover:to-violet-400 text-white font-semibold px-5 py-2.5 rounded-xl transition-all text-sm focus:outline-none focus:ring-2 focus:ring-violet-400">
+          class="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-semibold transition-all duration-200 text-sm shadow-md shadow-emerald-500/25 focus:outline-none focus:ring-2 focus:ring-zinc-600">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
           </svg>
@@ -96,7 +96,7 @@
         <label for="filter-q" class="block text-xs font-medium text-zinc-400 mb-1.5">Descrição</label>
         <input type="text" id="filter-q" name="q" value="{{ filtros.q }}" placeholder="Buscar por descrição..." class="w-full bg-zinc-900/60 border border-zinc-700 text-zinc-100 rounded-xl
                       px-4 py-2.5 text-sm placeholder-zinc-500
-                      focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent
+                      focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent
                       transition-all">
       </div>
 
@@ -105,7 +105,7 @@
         <label for="filter-tipo" class="block text-xs font-medium text-zinc-400 mb-1.5">Tipo</label>
         <select id="filter-tipo" name="tipo" class="w-full bg-zinc-900/60 border border-zinc-700 text-zinc-100 rounded-xl
                        px-4 py-2.5 text-sm
-                       focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent
+                       focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent
                        transition-all appearance-none">
           <option value="" {% if not filtros.tipo %}selected{% endif %}>Todos</option>
           <option value="entrada" {% if filtros.tipo == 'entrada' %}selected{% endif %}>Entradas</option>
@@ -118,7 +118,7 @@
         <label for="filter-data-inicio" class="block text-xs font-medium text-zinc-400 mb-1.5">Data início</label>
         <input type="date" id="filter-data-inicio" name="data_inicio" value="{{ filtros.data_inicio }}" class="w-full bg-zinc-900/60 border border-zinc-700 text-zinc-100 rounded-xl
                       px-4 py-2.5 text-sm
-                      focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent
+                      focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent
                       transition-all [color-scheme:dark]">
       </div>
 
@@ -127,15 +127,15 @@
         <label for="filter-data-fim" class="block text-xs font-medium text-zinc-400 mb-1.5">Data fim</label>
         <input type="date" id="filter-data-fim" name="data_fim" value="{{ filtros.data_fim }}" class="w-full bg-zinc-900/60 border border-zinc-700 text-zinc-100 rounded-xl
                       px-4 py-2.5 text-sm
-                      focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent
+                      focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent
                       transition-all [color-scheme:dark]">
       </div>
 
       <!-- Botões -->
       <div class="flex items-center gap-2 shrink-0">
-        <button type="submit" class="inline-flex items-center gap-2 bg-sky-500 hover:bg-sky-600
-                       text-slate-900 font-semibold px-5 py-2.5 rounded-xl
-                       text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-sky-400
+        <button type="submit" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600
+                       text-white font-semibold px-5 py-2.5 rounded-xl
+                       text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600
                        min-h-[44px]">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2" aria-hidden="true">

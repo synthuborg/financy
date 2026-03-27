@@ -28,44 +28,44 @@
           <!-- Tipo -->
           <div class="sm:col-span-2">
             <label class="block text-sm font-medium text-zinc-300 mb-2">
-              Tipo <span class="text-red-400">*</span>
+              Tipo <span class="text-rose-400">*</span>
             </label>
             {{ form.tipo }}
             {% if form.tipo.errors %}
-            <p class="mt-1.5 text-xs text-red-400">{{ form.tipo.errors.0 }}</p>
+            <p class="mt-1.5 text-xs text-rose-400">{{ form.tipo.errors.0 }}</p>
             {% endif %}
           </div>
 
           <!-- Valor -->
           <div>
             <label class="block text-sm font-medium text-zinc-300 mb-2">
-              Valor (R$) <span class="text-red-400">*</span>
+              Valor (R$) <span class="text-rose-400">*</span>
             </label>
             {{ form.valor }}
             {% if form.valor.errors %}
-            <p class="mt-1.5 text-xs text-red-400">{{ form.valor.errors.0 }}</p>
+            <p class="mt-1.5 text-xs text-rose-400">{{ form.valor.errors.0 }}</p>
             {% endif %}
           </div>
 
           <!-- Data -->
           <div>
             <label class="block text-sm font-medium text-zinc-300 mb-2">
-              Data <span class="text-red-400">*</span>
+              Data <span class="text-rose-400">*</span>
             </label>
             {{ form.data }}
             {% if form.data.errors %}
-            <p class="mt-1.5 text-xs text-red-400">{{ form.data.errors.0 }}</p>
+            <p class="mt-1.5 text-xs text-rose-400">{{ form.data.errors.0 }}</p>
             {% endif %}
           </div>
 
           <!-- Descrição -->
           <div class="sm:col-span-2">
             <label class="block text-sm font-medium text-zinc-300 mb-2">
-              Descrição <span class="text-red-400">*</span>
+              Descrição <span class="text-rose-400">*</span>
             </label>
             {{ form.descricao }}
             {% if form.descricao.errors %}
-            <p class="mt-1.5 text-xs text-red-400">{{ form.descricao.errors.0 }}</p>
+            <p class="mt-1.5 text-xs text-rose-400">{{ form.descricao.errors.0 }}</p>
             {% endif %}
           </div>
 
@@ -74,7 +74,7 @@
             <label class="block text-sm font-medium text-zinc-300 mb-2">Categoria</label>
             {{ form.categoria }}
             {% if form.categoria.errors %}
-            <p class="mt-1.5 text-xs text-red-400">{{ form.categoria.errors.0 }}</p>
+            <p class="mt-1.5 text-xs text-rose-400">{{ form.categoria.errors.0 }}</p>
             {% endif %}
           </div>
 
@@ -83,7 +83,7 @@
             <label class="block text-sm font-medium text-zinc-300 mb-2">Conta</label>
             {{ form.conta }}
             {% if form.conta.errors %}
-            <p class="mt-1.5 text-xs text-red-400">{{ form.conta.errors.0 }}</p>
+            <p class="mt-1.5 text-xs text-rose-400">{{ form.conta.errors.0 }}</p>
             {% endif %}
           </div>
 
@@ -91,9 +91,9 @@
 
         <!-- Non-field errors -->
         {% if form.non_field_errors %}
-        <div class="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl">
+        <div class="mt-4 p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl">
           {% for error in form.non_field_errors %}
-          <p class="text-sm text-red-400">{{ error }}</p>
+          <p class="text-sm text-rose-400">{{ error }}</p>
           {% endfor %}
         </div>
         {% endif %}
@@ -101,7 +101,7 @@
         <!-- Botões -->
         <div class="flex flex-col sm:flex-row gap-3 mt-8">
           <button type="submit"
-            class="flex-1 bg-violet-600 hover:bg-violet-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors text-sm">
+            class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors text-sm">
             {{ btn_label }}
           </button>
           <a href="{% url 'finances:transaction_list' %}"
