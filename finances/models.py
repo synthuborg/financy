@@ -85,7 +85,7 @@ class Transaction(models.Model):
     class Meta:
         verbose_name = 'Transação'
         verbose_name_plural = 'Transações'
-        ordering = ['-data']
+        ordering = ['-data', '-id']
         constraints = [
             models.CheckConstraint(
                 check=models.Q(valor__gt=0),

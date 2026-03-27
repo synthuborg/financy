@@ -32,7 +32,7 @@ def get_all_transactions(user):
         Transaction.objects
         .filter(usuario=user)
         .select_related('categoria', 'conta')
-        .order_by('-data')
+        .order_by('-data', '-pk')
     )
 
 
@@ -133,6 +133,6 @@ def get_report_data(user, data_inicio, data_fim):
             'maior_entrada': maior_entrada,
             'maior_saida': maior_saida,
         },
-        'transacoes': qs.order_by('-data'),
+        'transacoes': qs.order_by('-data', '-pk'),
         'por_categoria': por_categoria,
     }

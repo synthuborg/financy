@@ -1,0 +1,29 @@
+<div id="dashboard-live-activity" hx-swap-oob="innerHTML">
+  {% include 'telegram_bot/fragmentos/dashboard_lancamentos.html' %}
+</div>
+
+<div id="dashboard-live-kpis" hx-swap-oob="innerHTML">
+  {% include 'dashboard/fragmentos/kpi_cards.html' %}
+</div>
+
+<div id="dashboard-live-grafico-evolucao" hx-swap-oob="innerHTML">
+  {% with dados=dados_evolucao %}
+    {% include 'dashboard/fragmentos/grafico_evolucao.html' %}
+  {% endwith %}
+</div>
+
+<div id="dashboard-live-grafico-saidas" hx-swap-oob="innerHTML">
+  {% with dados=dados_saidas %}
+    {% include 'dashboard/fragmentos/grafico_saidas.html' %}
+  {% endwith %}
+</div>
+
+<div id="dashboard-live-grafico-metas" hx-swap-oob="innerHTML">
+  {% with dados=dados_metas %}
+    {% include 'dashboard/fragmentos/grafico_metas.html' %}
+  {% endwith %}
+</div>
+
+<div id="transactions-live-list" hx-swap-oob="innerHTML">
+  {% include 'finances/fragmentos/transaction_list_content.html' with transacoes=ultimas_transacoes is_paginated=False %}
+</div>

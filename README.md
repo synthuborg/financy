@@ -41,6 +41,9 @@
 - Motor de importação de extratos bancários (CSV, OFX, PDF) com auto-categorização por palavras-chave
 - Gerador de relatórios financeiros em PDF (ReportLab) e Excel (OpenPyXL) com filtro por período
 - Admin Panel protegido por perfil staff (`/admin-panel/`)
+- Integração Telegram multitenant por usuário (`/telegram/configurar/`) com onboarding para validar token, detectar chat_id e registrar webhook
+- Registro de transações em linguagem natural via bot Telegram (ex.: "gastei 50 no mercado", "recebi 3000 de salário")
+- Atualização automática da atividade recente no dashboard e da listagem de transações via websocket/OOB (sem polling contínuo)
 
 ---
 
@@ -117,6 +120,13 @@ Ou diretamente: http://127.0.0.1:8000/dashboard/
 | `GET /dashboard/htmx/grafico-saidas/` | — | Fragmento: distribuição de saídas |
 | `GET /dashboard/htmx/grafico-metas/` | — | Fragmento: progresso de metas |
 | `GET /dashboard/htmx/grafico-investimentos/` | — | Fragmento: carteira de investimentos |
+| `GET /telegram/configurar/` | `TelegramConfigView` | Onboarding e status da integração Telegram |
+| `POST /telegram/api/validate-token/` | `api_validate_token` | Valida token do bot no Telegram |
+| `POST /telegram/api/detect-chat-id/` | `api_detect_chat_id` | Detecta chat_id por `getUpdates` |
+| `POST /telegram/api/save-config/` | `api_save_config` | Salva credenciais (hash + cifrado), registra comandos e webhook |
+| `POST /telegram/api/disconnect/` | `api_disconnect` | Remove configuração do usuário e webhook |
+| `POST /telegram/webhook/` | `telegram_webhook` | Processa mensagens do Telegram e cria transações |
+| `GET /telegram/htmx/dashboard-parcial/` | `dashboard_partial` | Fragmento HTMX com atividade recente e resumo |
 | `GET /admin-panel/` | `AdminDashboardView` | Painel administrativo (apenas staff) |
 | `GET /admin-panel/transacoes/` | `AdminTransactionListView` | Lista de transações — admin (apenas staff) |
 | `GET /financas/transacoes/` | `TransactionListView` | Lista de transações do usuário |
@@ -170,6 +180,23 @@ Ou diretamente: http://127.0.0.1:8000/dashboard/
 ## Landing Page & Autenticação
 
 A landing page usa design **Glassmorphism Premium Dark**: fundo escuro com elementos semitransparentes, blur e gradientes.
+
+---
+
+## Telegram Bot (Segurança)
+
+- Cada usuário possui configuração isolada (`TelegramCredential`) no app separado `telegram_bot`.
+- `token` e `chat_id` **não são persistidos em texto puro**.
+- O banco armazena `token_hash` e `chat_id_hash` para verificação/lookup.
+- O token também é armazenado cifrado (`token_encrypted`) para uso operacional na API do Telegram.
+- O webhook identifica o usuário por `chat_id_hash`, sem fallback para outro usuário.
+
+### Variáveis de ambiente opcionais
+
+No arquivo de configuração (`fintrack/settings.py`):
+
+- `TELEGRAM_TOKEN_ENCRYPTION_KEY`: chave Fernet URL-safe base64 (quando não informada, deriva de `SECRET_KEY` em desenvolvimento)
+- `TELEGRAM_HASH_SECRET`: segredo para HMAC-SHA256 (quando não informado, usa `SECRET_KEY`)
 
 **Componentes da landing page:**
 - Navbar com efeito glass ao rolar a página (gerenciado por Alpine.js)

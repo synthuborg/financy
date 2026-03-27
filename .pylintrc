@@ -1,0 +1,15 @@
+[MASTER]
+ignore-patterns=.*migrations.*
+
+[TYPECHECK]
+generated-members=objects,DoesNotExist,MultipleObjectsReturned
+
+[MESSAGES CONTROL]
+disable=
+    missing-module-docstring,
+    missing-class-docstring,
+    missing-function-docstring,
+    too-few-public-methods,
+    broad-exception-caught,
+    no-member,
+    unused-argument

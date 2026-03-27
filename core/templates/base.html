@@ -1,10 +1,52 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}FinTrack{% endblock %} | JRD Labs</title>
+
+  <script>
+    (function () {
+      var storageKey = 'fintrack-theme';
+      var root = document.documentElement;
+
+      function prefersDark() {
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      }
+
+      function resolveTheme() {
+        try {
+          var saved = localStorage.getItem(storageKey);
+          if (saved === 'light' || saved === 'dark') {
+            return { theme: saved, source: 'saved' };
+          }
+        } catch (error) {
+          // localStorage pode estar indisponivel em alguns contextos.
+        }
+
+        return {
+          theme: prefersDark() ? 'dark' : 'light',
+          source: 'system',
+        };
+      }
+
+      function applyTheme(themeData) {
+        root.classList.remove('theme-light', 'theme-dark', 'dark');
+        root.classList.add('theme-' + themeData.theme);
+
+        if (themeData.theme === 'dark') {
+          root.classList.add('dark');
+        }
+
+        root.style.colorScheme = themeData.theme;
+        root.dataset.theme = themeData.theme;
+        root.dataset.themeSource = themeData.source;
+      }
+
+      applyTheme(resolveTheme());
+    })();
+  </script>
 
   <!-- Inter Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,6 +76,7 @@
 
   <!-- HTMX CDN -->
   <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <script src="https://unpkg.com/htmx-ext-ws@2.0.2/ws.js"></script>
 
   <!-- ApexCharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -42,8 +85,106 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
   <style>
+    :root {
+      --app-bg: #0a0a0a;
+      --surface-0: #0f172a;
+      --surface-1: #1e293b;
+      --surface-2: #334155;
+      --border-1: #334155;
+      --text-1: #f8fafc;
+      --text-2: #94a3b8;
+      --text-3: #64748b;
+      --hover-1: rgba(51, 65, 85, 0.6);
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --ring-neutral: #64748b;
+    }
+
+    html.theme-light {
+      --app-bg: #f4f7fb;
+      --surface-0: #ffffff;
+      --surface-1: #eef2ff;
+      --surface-2: #e2e8f0;
+      --border-1: #cbd5e1;
+      --text-1: #0f172a;
+      --text-2: #334155;
+      --text-3: #64748b;
+      --hover-1: rgba(148, 163, 184, 0.28);
+      --glass-bg: rgba(255, 255, 255, 0.9);
+      --glass-border: rgba(148, 163, 184, 0.45);
+      --ring-neutral: #94a3b8;
+    }
+
     body {
       font-family: 'Inter', ui-sans-serif, system-ui;
+    }
+
+    html.theme-light .bg-zinc-950,
+    html.theme-light .bg-slate-900,
+    html.theme-light .bg-slate-850 {
+      background-color: var(--app-bg) !important;
+    }
+
+    html.theme-light .bg-zinc-900,
+    html.theme-light .bg-zinc-900\/50,
+    html.theme-light .bg-zinc-900\/60,
+    html.theme-light .bg-zinc-800,
+    html.theme-light .bg-slate-800,
+    html.theme-light .bg-slate-800\/95 {
+      background-color: var(--surface-0) !important;
+    }
+
+    html.theme-light .bg-zinc-700,
+    html.theme-light .bg-zinc-700\/50,
+    html.theme-light .bg-slate-700,
+    html.theme-light .bg-slate-700\/50,
+    html.theme-light .bg-slate-700\/40,
+    html.theme-light .bg-slate-700\/60 {
+      background-color: var(--surface-2) !important;
+    }
+
+    html.theme-light .text-zinc-50,
+    html.theme-light .text-zinc-100,
+    html.theme-light .text-zinc-200,
+    html.theme-light .text-zinc-300,
+    html.theme-light .text-white,
+    html.theme-light .text-slate-50,
+    html.theme-light .text-slate-100,
+    html.theme-light .text-slate-200,
+    html.theme-light .text-slate-300 {
+      color: var(--text-1) !important;
+    }
+
+    html.theme-light .text-zinc-400,
+    html.theme-light .text-zinc-500,
+    html.theme-light .text-slate-400,
+    html.theme-light .text-slate-500 {
+      color: var(--text-2) !important;
+    }
+
+    html.theme-light .text-zinc-600,
+    html.theme-light .text-slate-600 {
+      color: var(--text-3) !important;
+    }
+
+    html.theme-light .border-zinc-800,
+    html.theme-light .border-zinc-700,
+    html.theme-light .border-zinc-700\/50,
+    html.theme-light .border-slate-700,
+    html.theme-light .border-slate-700\/50 {
+      border-color: var(--border-1) !important;
+    }
+
+    html.theme-light .hover\:bg-zinc-700:hover,
+    html.theme-light .hover\:bg-zinc-700\/50:hover,
+    html.theme-light .hover\:bg-slate-700:hover,
+    html.theme-light .hover\:bg-slate-700\/60:hover,
+    html.theme-light .hover\:bg-slate-700\/40:hover {
+      background-color: var(--hover-1) !important;
+    }
+
+    html.theme-light .focus\:ring-zinc-500:focus {
+      --tw-ring-color: var(--ring-neutral) !important;
     }
 
     .htmx-request .htmx-indicator {
@@ -55,10 +196,10 @@
     }
 
     .glass {
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--glass-bg);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--glass-border);
     }
 
     .gradient-text {
@@ -104,7 +245,7 @@
   {% block extra_head %}{% endblock %}
 </head>
 
-<body class="bg-zinc-950 text-zinc-50 min-h-screen antialiased" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+<body class="bg-zinc-950 text-zinc-50 min-h-screen antialiased">
 
   {% if user.is_authenticated %}
   <!-- Mobile Topbar -->
@@ -114,7 +255,13 @@
       <span class="text-sky-400 font-bold text-xl tracking-tight">Fin</span><span
         class="text-slate-50 font-bold text-xl tracking-tight">Track</span>
     </a>
-    <button aria-label="Abrir menu" aria-controls="main-sidebar" aria-expanded="false" hx-on:click="
+    <div class="flex items-center gap-2">
+      <button type="button" data-theme-toggle data-theme-toggle-compact aria-label="Alternar tema" class="p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-700
+                   focus:outline-none focus:ring-2 focus:ring-sky-500 transition-colors
+                   min-h-[44px] min-w-[44px] flex items-center justify-center">
+        <span data-theme-toggle-icon aria-hidden="true">🌙</span>
+      </button>
+      <button aria-label="Abrir menu" aria-controls="main-sidebar" aria-expanded="false" onclick="
               var sidebar = document.getElementById('main-sidebar');
               var overlay = document.getElementById('sidebar-overlay');
               sidebar.classList.toggle('-translate-x-full');
@@ -123,15 +270,16 @@
             " class="p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-700
                    focus:outline-none focus:ring-2 focus:ring-sky-500 transition-colors
                    min-h-[44px] min-w-[44px] flex items-center justify-center">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-        stroke-width="2" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    </button>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
   </header>
 
   <!-- Sidebar Overlay (mobile) -->
-  <div id="sidebar-overlay" class="hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" hx-on:click="
+  <div id="sidebar-overlay" class="hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" onclick="
          document.getElementById('main-sidebar').classList.add('-translate-x-full');
          this.classList.add('hidden');
        " aria-hidden="true"></div>
@@ -166,19 +314,11 @@
 
         <!-- Dashboard -->
         <li>
-          <a href="{% url 'dashboard:dashboard' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm
-                    min-h-[44px] transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500
-                    {% if request.resolver_match.namespace == 'dashboard' %}
-                      text-slate-100 bg-sky-500/15 border border-sky-500/20
-                    {% else %}
-                      text-slate-400 hover:text-slate-100 hover:bg-slate-700/60
-                    {% endif %}" {% if request.resolver_match.namespace == 'dashboard' %} aria-current="page" {% endif %}>
+          <a href="{% url 'dashboard:dashboard' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm min-h-[44px] transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-400 hover:text-slate-100 hover:bg-slate-700/60">
             <svg xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 shrink-0 {% if request.resolver_match.namespace == 'dashboard' %}text-sky-400{% endif %}"
+              class="h-5 w-5 shrink-0"
               fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0
-                       0V9a2 2 0 00-2-2H5a2 2 0 00-2 2v10m6 0a2 2 0 002 2h2a2 2 0 002-2m0
-                       0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 9.75L12 4.5l9 5.25M4.5 10.5V19.5h15V10.5" />
             </svg>
             Dashboard
           </a>
@@ -192,8 +332,7 @@
                       text-slate-100 bg-sky-500/15 border border-sky-500/20
                     {% else %}
                       text-slate-400 hover:text-slate-100 hover:bg-slate-700/60
-                    {% endif %}" {% if request.resolver_match.namespace=='finances' and 'transaction' in
-            request.resolver_match.url_name%}aria-current="page" {% endif %}>
+                        {% endif %}">
             <svg xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5 shrink-0 {% if request.resolver_match.namespace == 'finances' and 'transaction' in request.resolver_match.url_name %}text-sky-400{% endif %}"
               fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -231,7 +370,7 @@
                       text-slate-100 bg-sky-500/15 border border-sky-500/20
                     {% else %}
                       text-slate-400 hover:text-slate-100 hover:bg-slate-700/60
-                    {% endif %}" {% if request.resolver_match.namespace == 'finances' and 'conta_corrente' in request.resolver_match.url_name %}aria-current="page" {% endif %}>
+                    {% endif %}">
             <svg xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5 shrink-0 {% if request.resolver_match.namespace == 'finances' and 'conta_corrente' in request.resolver_match.url_name %}text-sky-400{% endif %}"
               fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -290,13 +429,31 @@
                       text-slate-100 bg-sky-500/15 border border-sky-500/20
                     {% else %}
                       text-slate-400 hover:text-slate-100 hover:bg-slate-700/60
-                    {% endif %}" {% if request.resolver_match.namespace == 'finances' and 'report' in request.resolver_match.url_name %} aria-current="page" {% endif %}>
+                    {% endif %}">
             <svg xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5 shrink-0 {% if request.resolver_match.namespace == 'finances' and 'report' in request.resolver_match.url_name %}text-sky-400{% endif %}"
               fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             Relatórios
+          </a>
+        </li>
+
+        <!-- Telegram Bot -->
+        <li>
+          <a href="{% url 'telegram_bot:configurar' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm
+                    min-h-[44px] transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500
+                    {% if request.resolver_match.namespace == 'telegram_bot' %}
+                      text-slate-100 bg-sky-500/15 border border-sky-500/20
+                    {% else %}
+                      text-slate-400 hover:text-slate-100 hover:bg-slate-700/60
+                    {% endif %}">
+            <svg xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 shrink-0 {% if request.resolver_match.namespace == 'telegram_bot' %}text-sky-400{% endif %}"
+              fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 3L3 10.53l6.7 2.24L12 21l2.24-6.3L21 3z" />
+            </svg>
+            Telegram Bot
           </a>
         </li>
 
@@ -314,7 +471,7 @@
                         text-slate-100 bg-sky-500/15 border border-sky-500/20
                       {% else %}
                         text-slate-400 hover:text-slate-100 hover:bg-slate-700/60
-                      {% endif %}" {% if request.resolver_match.namespace == 'admin_panel' %} aria-current="page" {% endif %}>
+                      {% endif %}">
               <svg xmlns="http://www.w3.org/2000/svg"
                 class="h-5 w-5 shrink-0 {% if request.resolver_match.namespace == 'admin_panel' %}text-sky-400{% endif %}"
                 fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -343,6 +500,16 @@
           <p class="text-xs text-slate-400 truncate">{{ user.email }}</p>
         </div>
       </div>
+      <button type="button" data-theme-toggle class="w-full mb-2 flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl
+                     text-slate-400 hover:text-slate-100 hover:bg-slate-700/60
+                     font-medium text-sm min-h-[44px] transition-colors
+                     focus:outline-none focus:ring-2 focus:ring-sky-500">
+        <span class="inline-flex items-center gap-2">
+          <span data-theme-toggle-icon aria-hidden="true">🌙</span>
+          <span>Tema</span>
+        </span>
+        <span data-theme-toggle-label>Escuro</span>
+      </button>
       <form method="post" action="{% url 'accounts:logout' %}">
         {% csrf_token %}
         <button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
@@ -359,12 +526,89 @@
       </form>
     </div>
   </aside>
-  
+
+  {% endif %}
 
   <!-- Wrapper principal -->
   <div class="{% if user.is_authenticated %}lg:pl-64{% endif %} min-h-screen flex flex-col">
     {% block content %}{% endblock %}
   </div>
+
+  <script>
+    (function () {
+      var storageKey = 'fintrack-theme';
+      var root = document.documentElement;
+      var mediaQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+      function setTheme(theme, source) {
+        root.classList.remove('theme-light', 'theme-dark', 'dark');
+        root.classList.add('theme-' + theme);
+
+        if (theme === 'dark') {
+          root.classList.add('dark');
+        }
+
+        root.style.colorScheme = theme;
+        root.dataset.theme = theme;
+        root.dataset.themeSource = source;
+        window.dispatchEvent(new CustomEvent('fintrack:theme-changed', {
+          detail: { theme: theme, source: source }
+        }));
+      }
+
+      function persistTheme(theme) {
+        try {
+          localStorage.setItem(storageKey, theme);
+        } catch (error) {
+          // Falha silenciosa em ambientes sem localStorage.
+        }
+      }
+
+      function getCurrentTheme() {
+        return root.dataset.theme === 'light' ? 'light' : 'dark';
+      }
+
+      function updateToggles(theme) {
+        var isDark = theme === 'dark';
+        var icons = document.querySelectorAll('[data-theme-toggle-icon]');
+        var labels = document.querySelectorAll('[data-theme-toggle-label]');
+
+        icons.forEach(function (icon) {
+          icon.textContent = isDark ? '🌙' : '☀️';
+        });
+
+        labels.forEach(function (label) {
+          label.textContent = isDark ? 'Escuro' : 'Claro';
+        });
+      }
+
+      function toggleTheme() {
+        var nextTheme = getCurrentTheme() === 'dark' ? 'light' : 'dark';
+        setTheme(nextTheme, 'saved');
+        persistTheme(nextTheme);
+        updateToggles(nextTheme);
+      }
+
+      document.querySelectorAll('[data-theme-toggle]').forEach(function (button) {
+        button.addEventListener('click', toggleTheme);
+      });
+
+      if (mediaQuery) {
+        mediaQuery.addEventListener('change', function (event) {
+          if (root.dataset.themeSource !== 'saved') {
+            setTheme(event.matches ? 'dark' : 'light', 'system');
+            updateToggles(root.dataset.theme);
+          }
+        });
+      }
+
+      updateToggles(getCurrentTheme());
+
+      document.body.addEventListener('htmx:configRequest', function (event) {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+      });
+    })();
+  </script>
 
   {% block extra_js %}{% endblock %}
 </body>

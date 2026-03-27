@@ -23,5 +23,6 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('financas/', include('finances.urls')),
+    path('telegram/', include('telegram_bot.urls')),
     path('admin-panel/', include('admin_panel.urls')),
 ]

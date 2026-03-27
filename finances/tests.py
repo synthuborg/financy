@@ -318,6 +318,57 @@ class TestCalculateBalance:
         assert saldo['total_entradas'] == Decimal('1500.00')
         assert saldo['saldo_liquido'] == Decimal('1500.00')
 
+
+@pytest.mark.django_db
+class TestDashboardRealtimeSignals:
+
+    def test_create_transaction_dispara_push_dashboard(self, usuario, monkeypatch):
+        chamadas = []
+
+        class FakeLayer:
+            def group_send(self, group_name, payload):
+                chamadas.append((group_name, payload))
+
+        monkeypatch.setattr('finances.signals._resolve_channel_layer', lambda: FakeLayer())
+        monkeypatch.setattr('finances.signals.async_to_sync', lambda fn: fn)
+
+        Transaction.objects.create(
+            usuario=usuario,
+            valor=Decimal('123.45'),
+            data=date.today(),
+            tipo='entrada',
+            descricao='Transação WS',
+        )
+
+        assert len(chamadas) == 1
+        group_name, payload = chamadas[0]
+        assert group_name == f'dashboard_user_{usuario.id}'
+        assert payload['type'] == 'dashboard.update'
+
+    def test_update_transaction_nao_dispara_push_dashboard(self, usuario, monkeypatch):
+        chamadas = []
+
+        class FakeLayer:
+            def group_send(self, group_name, payload):
+                chamadas.append((group_name, payload))
+
+        monkeypatch.setattr('finances.signals._resolve_channel_layer', lambda: FakeLayer())
+        monkeypatch.setattr('finances.signals.async_to_sync', lambda fn: fn)
+
+        tx = Transaction.objects.create(
+            usuario=usuario,
+            valor=Decimal('50.00'),
+            data=date.today(),
+            tipo='saida',
+            descricao='Original',
+        )
+        chamadas.clear()
+
+        tx.descricao = 'Atualizada'
+        tx.save()
+
+        assert chamadas == []
+
     def test_saldo_misto(self, db, usuario):
         from finances.services import create_transaction, calculate_balance
         create_transaction(usuario, {'valor': '2000.00', 'data': date.today(), 'tipo': 'entrada', 'descricao': 'E'})
@@ -391,6 +442,12 @@ class TestTransactionViews:
         url = reverse('finances:transaction_list')
         response = client_autenticado.get(url)
         assert response.status_code == 200
+
+    def test_transaction_list_template_conecta_websocket(self, client_autenticado):
+        url = reverse('finances:transaction_list')
+        response = client_autenticado.get(url)
+        assert response.status_code == 200
+        assert b'ws-connect="/ws/dashboard/"' in response.content
 
     def test_transaction_list_requer_login(self, client):
         url = reverse('finances:transaction_list')

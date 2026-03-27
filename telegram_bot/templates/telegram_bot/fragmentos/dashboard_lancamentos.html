@@ -1,0 +1,53 @@
+<div class="bg-slate-800 rounded-2xl border border-slate-700/50 shadow-xl overflow-hidden">
+  {% if ultimas_transacoes %}
+    <ul class="divide-y divide-slate-700/50" role="list">
+      {% for t in ultimas_transacoes|slice:":5" %}
+        <li class="group hover:bg-slate-700/40 transition-colors">
+          <div class="flex items-center gap-4 px-5 py-4">
+            <div class="shrink-0 h-10 w-10 rounded-xl flex items-center justify-center {% if t.tipo == 'entrada' %}
+                bg-emerald-500/10
+              {% else %}
+                bg-red-500/10
+              {% endif %}">
+              {% if t.tipo == 'entrada' %}
+                <span class="text-emerald-400">📈</span>
+              {% else %}
+                <span class="text-red-400">📉</span>
+              {% endif %}
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-slate-100 truncate">{{ t.descricao }}</p>
+              <div class="flex items-center gap-2 mt-0.5 flex-wrap">
+                <span class="text-xs text-slate-400">{{ t.data|date:'d/m/Y' }}</span>
+                {% if t.categoria %}
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium {% if t.tipo == 'entrada' %}
+                      bg-emerald-500/10 text-emerald-400
+                    {% else %}
+                      bg-red-500/10 text-red-400
+                    {% endif %}">
+                    {{ t.categoria.nome }}
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+            <span class="shrink-0 text-sm font-bold {% if t.tipo == 'entrada' %}
+                text-emerald-400
+              {% else %}
+                text-red-400
+              {% endif %}">
+              {% if t.tipo == 'entrada' %}
+                +
+              {% else %}
+                -
+              {% endif %}R$ {{ t.valor|floatformat:'2g' }}
+            </span>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="p-8 text-center text-slate-400 text-sm">Nenhuma transação registrada ainda.</div>
+  {% endif %}
+</div>
+
+

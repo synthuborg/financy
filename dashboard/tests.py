@@ -258,6 +258,46 @@ class TestDashboardViewComDados:
         assert 'ultimas_transacoes' in response.context
 
 
+@pytest.mark.django_db
+class TestDashboardPushPayload:
+
+    def test_payload_inclui_bloco_oob_da_lista_de_transacoes(self, usuario):
+        from dashboard import selectors as dashboard_selectors
+        from django.template.loader import render_to_string
+        from finances.services import calculate_balance
+
+        Transaction.objects.create(
+            usuario=usuario,
+            valor=Decimal('321.00'),
+            data=date.today(),
+            tipo='entrada',
+            descricao='Lançamento Push Lista',
+        )
+
+        context = {
+            'resumo_mes': dashboard_selectors.obter_resumo_mes_atual(usuario),
+            'ultimas_transacoes': dashboard_selectors.obter_ultimas_transacoes(
+                usuario, limit=20
+            ),
+            'saldo': calculate_balance(usuario),
+            'dados_evolucao': dashboard_selectors.obter_dados_evolucao_6_meses(
+                usuario
+            ),
+            'dados_saidas': dashboard_selectors.obter_distribuicao_saidas_mes(
+                usuario
+            ),
+            'dados_metas': dashboard_selectors.obter_dados_metas(usuario),
+        }
+
+        payload = render_to_string(
+            'dashboard/fragmentos/dashboard_push_update.html',
+            context,
+        )
+
+        assert 'id="transactions-live-list"' in payload
+        assert 'Lançamento Push Lista' in payload
+
+
 # ============================================================
 # Fase 6 — Metas no Dashboard
 # ============================================================
