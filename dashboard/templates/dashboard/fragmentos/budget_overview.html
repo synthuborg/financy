@@ -1,0 +1,101 @@
+{% if budget_status %}
+  <section aria-label="Orçamento mensal" class="flex flex-col gap-6">
+    <div class="bg-zinc-950 rounded-2xl border border-zinc-800/60 shadow-xl p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-sm font-semibold text-zinc-200">Orçamento Mensal</h2>
+        {% if show_config_link is not False %}
+          <a href="{% url 'finances:budget_config' %}" class="text-xs text-emerald-400 hover:text-emerald-300">Configurar</a>
+        {% endif %}
+      </div>
+      <p class="text-xs text-zinc-500 mb-2">Limite atual</p>
+      <p class="text-2xl font-bold font-mono text-zinc-100">R$ {{ budget_status.limite_mensal|floatformat:'2g' }}</p>
+
+      <div class="mt-4">
+        <div class="flex items-center justify-between text-xs text-zinc-400 mb-2">
+          <span>Consumo</span>
+          <span class="font-mono">{{ budget_status.consumo_percentual|floatformat:'2g' }}%</span>
+        </div>
+        <div class="w-full h-2 bg-zinc-800 rounded-full overflow-hidden">
+          <div class="h-full {% if budget_status.nivel_alerta == 'danger' %}bg-rose-500{% elif budget_status.nivel_alerta == 'warning-10' or budget_status.nivel_alerta == 'warning-20' %}bg-amber-400{% else %}bg-emerald-500{% endif %}" style="width: {% if budget_status.consumo_percentual > 100 %}100{% else %}{{ budget_status.consumo_percentual|floatformat:'0' }}{% endif %}%"></div>
+        </div>
+      </div>
+
+      <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
+        <div class="rounded-xl bg-zinc-900/70 border border-zinc-800 p-3">
+          <p class="text-zinc-500 text-xs">Restante</p>
+          <p class="font-mono {% if budget_status.restante < 0 %}text-rose-400{% else %}text-zinc-200{% endif %}">R$ {{ budget_status.restante|floatformat:'2g' }}</p>
+        </div>
+        <div class="rounded-xl bg-zinc-900/70 border border-zinc-800 p-3">
+          <p class="text-zinc-500 text-xs">Máximo por dia</p>
+          <p class="font-mono text-zinc-200">R$ {{ budget_status.limite_diario_recomendado|floatformat:'2g' }}</p>
+        </div>
+      </div>
+
+      <div class="mt-4 rounded-xl border px-3 py-2 text-xs {% if budget_status.nivel_alerta == 'danger' %}border-rose-500/30 bg-rose-500/10 text-rose-300{% elif budget_status.nivel_alerta == 'warning-10' or budget_status.nivel_alerta == 'warning-20' %}border-amber-500/30 bg-amber-500/10 text-amber-300{% else %}border-emerald-500/30 bg-emerald-500/10 text-emerald-300{% endif %}">
+        {{ budget_status.mensagem }}
+      </div>
+
+      {% if budget_alerts %}
+        <div class="mt-4">
+          <p class="text-xs text-zinc-500 mb-2">Alertas recentes</p>
+          <ul class="space-y-2">
+            {% for alerta in budget_alerts %}
+              <li class="text-xs text-zinc-300 border-b border-zinc-800/40 pb-2">
+                {{ alerta.mensagem }}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="bg-zinc-950 rounded-2xl border border-zinc-800/60 shadow-xl p-5">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-sm font-semibold text-zinc-200">Calendário de Gastos</h2>
+        <span class="text-xs text-zinc-500">{{ budget_calendar.mes_nome }} / {{ budget_calendar.ano }}</span>
+      </div>
+
+      <div class="grid grid-cols-7 gap-2 text-xs text-zinc-500 mb-2">
+        <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
+      </div>
+
+      <div class="space-y-2">
+        {% for linha in budget_calendar.linhas %}
+          <div class="grid grid-cols-7 gap-2">
+            {% for dia in linha %}
+              {% if dia %}
+                <div class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-2 min-h-[100px] {% if dia.is_today %}ring-1 ring-emerald-500/50{% endif %}">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs text-zinc-300 font-semibold">{{ dia.dia }}</span>
+                    <span class="text-[10px] text-zinc-500">{{ dia.qtd_despesas }} desp.</span>
+                  </div>
+                  <p class="text-[10px] text-zinc-500">Gasto do dia</p>
+                  <p class="text-xs font-mono {% if dia.gasto_dia > dia.limite_recomendado_dia %}text-rose-400{% else %}text-zinc-200{% endif %}">
+                    R$ {{ dia.gasto_dia|floatformat:'2g' }}
+                  </p>
+                  <p class="text-[10px] text-zinc-500 mt-1">Máx. recomendado</p>
+                  <p class="text-xs font-mono text-zinc-300">R$ {{ dia.limite_recomendado_dia|floatformat:'2g' }}</p>
+                  <p class="text-[10px] mt-1 {% if dia.percentual_dia > 5 %}text-rose-400{% else %}text-zinc-500{% endif %}">
+                    {{ dia.percentual_dia|floatformat:'2g' }}% do limite mensal
+                  </p>
+                </div>
+              {% else %}
+                <div class="rounded-xl border border-transparent p-2 min-h-[100px]"></div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% else %}
+  <section class="bg-zinc-950 rounded-2xl border border-zinc-800/60 shadow-xl p-5 mb-6">
+    <div class="flex items-center justify-between gap-4">
+      <div>
+        <h2 class="text-base font-semibold text-zinc-200">Orçamento mensal ainda não configurado</h2>
+        <p class="text-sm text-zinc-500 mt-1">Defina renda, limite percentual e alertas para receber avisos preventivos.</p>
+      </div>
+      <a href="{% url 'finances:budget_config' %}" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-4 py-2.5 rounded-xl transition-colors text-sm">Configurar orçamento</a>
+    </div>
+  </section>
+{% endif %}

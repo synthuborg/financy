@@ -3,6 +3,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.template.loader import render_to_string
 
 from dashboard import selectors as dashboard_selectors
+from finances import selectors as finances_selectors
 from finances.services import calculate_balance
 
 
@@ -46,6 +47,9 @@ class DashboardConsumer(AsyncWebsocketConsumer):
                 user
             ),
             'dados_metas': dashboard_selectors.obter_dados_metas(user),
+            'budget_status': finances_selectors.get_budget_status(user),
+            'budget_alerts': finances_selectors.get_recent_budget_alerts(user),
+            'budget_calendar': finances_selectors.get_budget_calendar_data(user),
         }
         return render_to_string(
             'dashboard/fragmentos/dashboard_push_update.html',

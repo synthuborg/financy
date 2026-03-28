@@ -6,6 +6,10 @@
   {% include 'dashboard/fragmentos/kpi_cards.html' %}
 </div>
 
+<div id="dashboard-budget-alert" hx-swap-oob="innerHTML">
+  {% include 'dashboard/fragmentos/budget_alert_flag.html' %}
+</div>
+
 <div id="dashboard-live-grafico-evolucao" hx-swap-oob="innerHTML">
   {% with dados=dados_evolucao %}
     {% include 'dashboard/fragmentos/grafico_evolucao.html' %}

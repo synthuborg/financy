@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django import forms
 
-from .models import Account, Category, Goal, Transaction
+from .models import Account, Category, Goal, MonthlyBudgetConfig, Transaction
 
 
 INPUT_CSS = (
@@ -129,6 +129,35 @@ class GoalAddProgressForm(forms.Form):
         }),
         label='Valor do Depósito',
     )
+
+
+class MonthlyBudgetConfigForm(forms.ModelForm):
+    class Meta:
+        model = MonthlyBudgetConfig
+        fields = ['renda_mensal', 'limite_percentual', 'alertas_ativos']
+        widgets = {
+            'renda_mensal': forms.NumberInput(attrs={
+                'class': INPUT_CSS,
+                'placeholder': 'Ex: 5000,00',
+                'step': '0.01',
+                'min': '0.01',
+            }),
+            'limite_percentual': forms.NumberInput(attrs={
+                'class': INPUT_CSS,
+                'placeholder': 'Ex: 80',
+                'step': '0.01',
+                'min': '1',
+                'max': '100',
+            }),
+            'alertas_ativos': forms.CheckboxInput(attrs={
+                'class': 'h-4 w-4 rounded border-zinc-700 bg-zinc-900 text-emerald-500 focus:ring-emerald-500',
+            }),
+        }
+        labels = {
+            'renda_mensal': 'Renda Mensal',
+            'limite_percentual': 'Percentual Máximo de Gastos (%)',
+            'alertas_ativos': 'Ativar alertas de orçamento no Telegram',
+        }
 
 
 class ReportFilterForm(forms.Form):

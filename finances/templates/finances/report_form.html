@@ -3,14 +3,7 @@
   Relatórios — FinTrack
 {% endblock %}
 {% block content %}
-  <style>
-    [x-cloak] {
-      display: none !important;
-    }
-  </style>
-
-  <div class="min-h-screen bg-zinc-950 relative overflow-hidden py-10 px-4" x-data="{ exportarModalAberto: false }"
-    @keydown.escape.window="if (exportarModalAberto) { exportarModalAberto = false; $nextTick(() => $refs.botaoExportar.focus()) }">
+  <div class="min-h-screen bg-zinc-950 relative overflow-hidden py-10 px-4">
     <div class="absolute top-16 -left-28 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl animate-pulse-glow pointer-events-none" aria-hidden="true"></div>
     <div class="absolute bottom-10 -right-28 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl animate-pulse-glow pointer-events-none" aria-hidden="true"></div>
 
@@ -25,13 +18,13 @@
           <span class="inline-flex items-center justify-center rounded-xl bg-zinc-900/70 border border-zinc-800 px-4 py-2 text-sm text-zinc-300 font-mono">
             {{ report_preview.periodo.inicio|date:'d/m/Y' }} - {{ report_preview.periodo.fim|date:'d/m/Y' }}
           </span>
-          <button x-ref="botaoExportar" type="button" @click="exportarModalAberto = true"
+          <a href="#exportar-relatorio"
             class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-sm transition-all duration-200 shadow-md shadow-emerald-500/25 focus:outline-none focus:ring-2 focus:ring-zinc-600">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
             </svg>
             Exportar
-          </button>
+          </a>
         </div>
       </header>
 
@@ -108,7 +101,7 @@
         <h2 class="text-base font-semibold text-white mb-3">Como exportar</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
           <div class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
-            <p class="text-zinc-300 font-medium mb-1">1. Abra o modal</p>
+            <p class="text-zinc-300 font-medium mb-1">1. Abra o formulário</p>
             <p class="text-zinc-500">Clique no botão <span class="text-zinc-300">Exportar</span> no topo da página.</p>
           </div>
           <div class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
@@ -120,27 +113,18 @@
             <p class="text-zinc-500">Disponível: {% for key, label in formatos_disponiveis.items %}<span class="font-mono text-zinc-300">{{ label }}</span>{% if not forloop.last %}, {% endif %}{% endfor %}.</p>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
 
-    <div x-cloak x-show="exportarModalAberto" x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div class="absolute inset-0 bg-black/80"></div>
-
-      <div class="relative w-full max-w-2xl glass rounded-2xl p-6 sm:p-8 border border-zinc-800/60 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="exportar-modal-titulo">
+      <section id="exportar-relatorio" class="glass rounded-2xl p-6 sm:p-8 border border-zinc-800/60 shadow-2xl">
         <div class="flex items-start justify-between gap-4 mb-6">
           <div>
             <p class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Exportação de relatórios</p>
             <h2 id="exportar-modal-titulo" class="text-xl font-bold text-white">Gerar arquivo do período</h2>
-            <p class="text-sm text-zinc-400 mt-1">Feche com ESC ou no botão Cancelar. Clique fora do card não fecha o modal para evitar perda de preenchimento.</p>
+            <p class="text-sm text-zinc-400 mt-1">Preencha o período, escolha o formato e clique em Gerar Relatório.</p>
           </div>
-          <button type="button" @click="exportarModalAberto = false; $nextTick(() => $refs.botaoExportar.focus())"
-            class="inline-flex items-center justify-center rounded-lg border border-zinc-700 bg-zinc-900/70 text-zinc-300 hover:bg-zinc-800 w-9 h-9 focus:outline-none focus:ring-2 focus:ring-zinc-600"
-            aria-label="Fechar modal">
-            <span aria-hidden="true">×</span>
-          </button>
         </div>
 
-        <form method="post" novalidate>
+        <form method="post" novalidate aria-labelledby="exportar-modal-titulo">
           {% csrf_token %}
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -178,10 +162,6 @@
           {% endif %}
 
           <div class="mt-8 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
-            <button type="button" @click="exportarModalAberto = false; $nextTick(() => $refs.botaoExportar.focus())"
-              class="inline-flex items-center justify-center gap-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-200 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
-              Cancelar
-            </button>
             <button type="submit"
               class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-semibold transition-all duration-200 text-sm shadow-md shadow-emerald-500/25 focus:outline-none focus:ring-2 focus:ring-zinc-600 min-h-[44px]">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -191,7 +171,7 @@
             </button>
           </div>
         </form>
-      </div>
+      </section>
     </div>
   </div>
 {% endblock %}

@@ -40,5 +40,7 @@ urlpatterns = [
     path('importar/', views.ImportStatementView.as_view(), name='import_statement'),
     # Relatórios
     path('relatorios/', views.ReportView.as_view(), name='report'),
+    # Orçamento
+    path('orcamento/', views.MonthlyBudgetConfigView.as_view(), name='budget_config'),
 ]
 

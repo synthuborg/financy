@@ -1,4 +1,5 @@
 import csv
+import datetime
 import io
 import logging
 from decimal import Decimal, InvalidOperation
@@ -7,7 +8,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction as db_transaction
 from django.db.models import Sum
 
-from .models import Category, Transaction
+from .models import BudgetAlertEvent, Category, MonthlyBudgetConfig, Transaction
 
 logger = logging.getLogger(__name__)
 
@@ -412,6 +413,171 @@ def add_progress_to_goal(goal_id: int, user, valor) -> 'Goal':
     meta.valor_atual = min(meta.valor_atual + incremento, meta.valor_alvo)
     meta.save(update_fields=['valor_atual'])
     return meta
+
+
+# ---------------------------------------------------------------------------
+# Orçamento Mensal
+# ---------------------------------------------------------------------------
+
+def upsert_monthly_budget_config(user, data: dict) -> 'MonthlyBudgetConfig':
+    renda_mensal = Decimal(str(data['renda_mensal']))
+    limite_percentual = Decimal(str(data['limite_percentual']))
+
+    if renda_mensal <= 0:
+        raise ValidationError('A renda mensal deve ser maior que zero.')
+    if limite_percentual <= 0 or limite_percentual > 100:
+        raise ValidationError('O percentual do limite deve estar entre 1 e 100.')
+
+    config, _ = MonthlyBudgetConfig.objects.update_or_create(
+        usuario=user,
+        defaults={
+            'renda_mensal': renda_mensal,
+            'limite_percentual': limite_percentual,
+            'alertas_ativos': bool(data.get('alertas_ativos', True)),
+        },
+    )
+    config.full_clean()
+    config.save()
+    return config
+
+
+def _send_budget_telegram_alert(user, message: str) -> bool:
+    from telegram_bot.models import TelegramCredential
+    from telegram_bot.services import TelegramService
+
+    credential = TelegramCredential.objects.filter(user=user, ativo=True).first()
+    if credential is None:
+        return False
+
+    chat_id = credential.get_chat_id()
+    if not chat_id:
+        return False
+
+    try:
+        service = TelegramService(credential.get_token())
+        service.send_message(chat_id=chat_id, text=message)
+        return True
+    except Exception as exc:  # noqa: BLE001
+        logger.warning('Falha ao enviar alerta de orçamento para Telegram: %s', exc)
+        return False
+
+
+def _build_budget_alert_message(event_type: str, status: dict, transaction: Transaction) -> str:
+    if event_type == BudgetAlertEvent.EVENT_THRESHOLD_20:
+        return (
+            '⚠️ <b>Alerta de orçamento</b>\n\n'
+            'Você consumiu 80% do limite mensal de saídas.\n'
+            f'Limite: R$ {status["limite_mensal"]:.2f}\n'
+            f'Gasto atual: R$ {status["total_saidas"]:.2f}\n'
+            f'Restante: R$ {status["restante"]:.2f}'
+        )
+    if event_type == BudgetAlertEvent.EVENT_THRESHOLD_10:
+        return (
+            '🚨 <b>Alerta de orçamento</b>\n\n'
+            'Faltam menos de 10% para seu limite mensal de saídas.\n'
+            f'Limite: R$ {status["limite_mensal"]:.2f}\n'
+            f'Gasto atual: R$ {status["total_saidas"]:.2f}\n'
+            f'Restante: R$ {status["restante"]:.2f}'
+        )
+    if event_type == BudgetAlertEvent.EVENT_LIMIT_REACHED:
+        return (
+            '⛔ <b>Limite mensal atingido</b>\n\n'
+            f'Limite: R$ {status["limite_mensal"]:.2f}\n'
+            f'Gasto atual: R$ {status["total_saidas"]:.2f}\n'
+            'A partir de agora, novas despesas disparam alerta.'
+        )
+    return (
+        '❗ <b>Despesa acima do limite</b>\n\n'
+        f'Nova despesa registrada: R$ {transaction.valor:.2f}\n'
+        f'Descrição: {transaction.descricao[:80]}\n'
+        f'Total gasto no mês: R$ {status["total_saidas"]:.2f}\n'
+        f'Limite mensal: R$ {status["limite_mensal"]:.2f}'
+    )
+
+
+def evaluate_and_dispatch_budget_alerts(transaction: Transaction) -> None:
+    from .selectors import get_budget_status
+
+    if transaction.tipo != 'saida':
+        return
+
+    config = MonthlyBudgetConfig.objects.filter(usuario=transaction.usuario).first()
+    if config is None or not config.alertas_ativos:
+        return
+
+    status = get_budget_status(transaction.usuario, reference_date=transaction.data)
+    if status is None:
+        return
+
+    consumed = status['consumo_percentual']
+    year = transaction.data.year
+    month = transaction.data.month
+
+    if consumed >= Decimal('80'):
+        event_20, created = BudgetAlertEvent.objects.get_or_create(
+            usuario=transaction.usuario,
+            ano=year,
+            mes=month,
+            event_type=BudgetAlertEvent.EVENT_THRESHOLD_20,
+            defaults={
+                'mensagem': _build_budget_alert_message(
+                    BudgetAlertEvent.EVENT_THRESHOLD_20,
+                    status,
+                    transaction,
+                )
+            },
+        )
+        if created:
+            _send_budget_telegram_alert(transaction.usuario, event_20.mensagem)
+
+    if consumed >= Decimal('90'):
+        event_10, created = BudgetAlertEvent.objects.get_or_create(
+            usuario=transaction.usuario,
+            ano=year,
+            mes=month,
+            event_type=BudgetAlertEvent.EVENT_THRESHOLD_10,
+            defaults={
+                'mensagem': _build_budget_alert_message(
+                    BudgetAlertEvent.EVENT_THRESHOLD_10,
+                    status,
+                    transaction,
+                )
+            },
+        )
+        if created:
+            _send_budget_telegram_alert(transaction.usuario, event_10.mensagem)
+
+    if consumed >= Decimal('100'):
+        event_limit, created = BudgetAlertEvent.objects.get_or_create(
+            usuario=transaction.usuario,
+            ano=year,
+            mes=month,
+            event_type=BudgetAlertEvent.EVENT_LIMIT_REACHED,
+            defaults={
+                'mensagem': _build_budget_alert_message(
+                    BudgetAlertEvent.EVENT_LIMIT_REACHED,
+                    status,
+                    transaction,
+                )
+            },
+        )
+        if created:
+            _send_budget_telegram_alert(transaction.usuario, event_limit.mensagem)
+
+    if consumed > Decimal('100'):
+        post_limit_message = _build_budget_alert_message(
+            BudgetAlertEvent.EVENT_POST_LIMIT_EXPENSE,
+            status,
+            transaction,
+        )
+        BudgetAlertEvent.objects.create(
+            usuario=transaction.usuario,
+            ano=year,
+            mes=month,
+            event_type=BudgetAlertEvent.EVENT_POST_LIMIT_EXPENSE,
+            mensagem=post_limit_message,
+        )
+        _send_budget_telegram_alert(transaction.usuario, post_limit_message)
 
 
 # ---------------------------------------------------------------------------

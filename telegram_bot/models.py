@@ -19,6 +19,7 @@ class TelegramCredential(models.Model):
     token_hash = models.CharField(max_length=64, db_index=True)
     token_encrypted = models.TextField()
     chat_id_hash = models.CharField(max_length=64, unique=True)
+    chat_id_encrypted = models.TextField(blank=True, default='')
     bot_username = models.CharField(max_length=100, blank=True)
     ativo = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -63,7 +64,14 @@ class TelegramCredential(models.Model):
         self.token_encrypted = self._fernet().encrypt(token.encode()).decode()
 
     def set_chat_id(self, chat_id: str) -> None:
-        self.chat_id_hash = self.hash_chat_id(str(chat_id))
+        raw_chat_id = str(chat_id)
+        self.chat_id_hash = self.hash_chat_id(raw_chat_id)
+        self.chat_id_encrypted = self._fernet().encrypt(raw_chat_id.encode()).decode()
 
     def get_token(self) -> str:
         return self._fernet().decrypt(self.token_encrypted.encode()).decode()
+
+    def get_chat_id(self) -> str:
+        if not self.chat_id_encrypted:
+            return ''
+        return self._fernet().decrypt(self.chat_id_encrypted.encode()).decode()

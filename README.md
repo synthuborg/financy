@@ -44,6 +44,7 @@
 - Integração Telegram multitenant por usuário (`/telegram/configurar/`) com onboarding para validar token, detectar chat_id e registrar webhook
 - Registro de transações em linguagem natural via bot Telegram (ex.: "gastei 50 no mercado", "recebi 3000 de salário")
 - Atualização automática da atividade recente no dashboard e da listagem de transações via websocket/OOB (sem polling contínuo)
+- Orçamento mensal por percentual da renda com limite diário dinâmico, calendário de gastos, alertas no dashboard e notificações no Telegram (20%, 10%, 100% e pós-limite)
 
 ---
 
@@ -172,6 +173,8 @@ Ou diretamente: http://127.0.0.1:8000/dashboard/
 | `GET /financas/metas/<pk>/excluir/` | `GoalDeleteView` | Confirmação de exclusão de meta |
 | `POST /financas/metas/<pk>/excluir/` | `GoalDeleteView` | Excluir meta |
 | `POST /financas/metas/<pk>/progresso/` | `GoalAddProgressView` | Adicionar progresso a uma meta |
+| `GET /financas/orcamento/` | `MonthlyBudgetConfigView` | Configurar orçamento mensal, alertas e acompanhar calendário de gastos |
+| `POST /financas/orcamento/` | `MonthlyBudgetConfigView` | Salvar configuração de orçamento e preferências de alerta |
 | `GET /financas/relatorios/` | `ReportFormView` | Formulário de geração de relatório |
 | `POST /financas/relatorios/` | `ReportFormView` | Gerar relatório em PDF ou Excel |
 

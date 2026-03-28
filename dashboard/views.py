@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 
 from . import selectors
 from finances.services import calculate_balance
+from finances import selectors as finances_selectors
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -15,6 +16,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         ctx['resumo_mes'] = selectors.obter_resumo_mes_atual(user)
         ctx['ultimas_transacoes'] = selectors.obter_ultimas_transacoes(user)
         ctx['metas'] = selectors.obter_metas_resumo(user)
+        ctx['budget_status'] = finances_selectors.get_budget_status(user)
+        ctx['budget_alerts'] = finances_selectors.get_recent_budget_alerts(user)
+        ctx['budget_calendar'] = finances_selectors.get_budget_calendar_data(user)
         return ctx
 
 

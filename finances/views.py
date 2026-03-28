@@ -16,6 +16,7 @@ from .forms import (
     GoalAddProgressForm,
     GoalForm,
     ImportStatementForm,
+    MonthlyBudgetConfigForm,
     ReportFilterForm,
     TransactionForm,
 )
@@ -30,6 +31,7 @@ from .services import (
     generate_pdf_report,
     process_bank_statement_import,
     update_goal,
+    upsert_monthly_budget_config,
     update_transaction,
 )
 
@@ -695,3 +697,31 @@ class ReportView(LoginRequiredMixin, FormView):
                 f'attachment; filename="relatorio_{data_inicio}_{data_fim}.xlsx"'
             )
         return response
+
+
+class MonthlyBudgetConfigView(LoginRequiredMixin, FormView):
+    template_name = 'finances/budget_config.html'
+    form_class = MonthlyBudgetConfigForm
+    success_url = reverse_lazy('finances:budget_config')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = finances_selectors.get_monthly_budget_config(self.request.user)
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['budget_status'] = finances_selectors.get_budget_status(self.request.user)
+        ctx['budget_calendar'] = finances_selectors.get_budget_calendar_data(self.request.user)
+        ctx['budget_alerts'] = finances_selectors.get_recent_budget_alerts(self.request.user)
+        return ctx
+
+    def form_valid(self, form):
+        cleaned = form.cleaned_data
+        try:
+            upsert_monthly_budget_config(self.request.user, cleaned)
+            messages.success(self.request, 'Orçamento mensal atualizado com sucesso!')
+            return redirect(self.success_url)
+        except Exception as exc:  # noqa: BLE001
+            messages.error(self.request, f'Erro ao salvar orçamento: {exc}')
+            return self.form_invalid(form)

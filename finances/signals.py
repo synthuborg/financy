@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from finances.models import Transaction
+from finances.services import evaluate_and_dispatch_budget_alerts
 
 
 def _resolve_channel_layer():
@@ -29,3 +30,5 @@ def push_dashboard_update_on_transaction(sender, instance, created, **kwargs):
         group_name,
         {'type': 'dashboard.update'},
     )
+
+    evaluate_and_dispatch_budget_alerts(instance)

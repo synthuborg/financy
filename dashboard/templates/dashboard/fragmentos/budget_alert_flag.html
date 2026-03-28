@@ -1,0 +1,19 @@
+<section aria-label="Alerta de orçamento" class="bg-zinc-950 rounded-2xl border border-zinc-800/60 shadow-xl p-5">
+  <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+    <div>
+      <p class="text-sm font-semibold text-zinc-200">Alerta de orçamento</p>
+      {% if budget_status %}
+        <p class="text-sm mt-1 {% if budget_status.nivel_alerta == 'danger' %}text-rose-300{% elif budget_status.nivel_alerta == 'warning-10' or budget_status.nivel_alerta == 'warning-20' %}text-amber-300{% else %}text-zinc-300{% endif %}">
+          {{ budget_status.mensagem }}
+        </p>
+      {% else %}
+        <p class="text-sm mt-1 text-zinc-400">Você ainda não configurou orçamento mensal.</p>
+      {% endif %}
+    </div>
+
+    <a href="{% url 'finances:budget_config' %}"
+      class="inline-flex shrink-0 items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-4 py-2.5 rounded-xl transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 min-h-[44px]">
+      Ir para Orçamento
+    </a>
+  </div>
+</section>

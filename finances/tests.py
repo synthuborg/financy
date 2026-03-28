@@ -7,7 +7,13 @@ import pytest
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-from finances.models import Account, Category, Transaction
+from finances.models import (
+    Account,
+    BudgetAlertEvent,
+    Category,
+    MonthlyBudgetConfig,
+    Transaction,
+)
 from finances.services import _auto_categorize, process_bank_statement_import
 
 
@@ -1208,6 +1214,16 @@ class TestReportView:
         assert 'report_preview' in response.context
         assert 'Exportar' in response.content.decode('utf-8')
 
+    def test_report_page_has_export_form_without_js(self, client_autenticado):
+        url = reverse('finances:report')
+        response = client_autenticado.get(url)
+        html = response.content.decode('utf-8')
+
+        assert response.status_code == 200
+        assert 'id="exportar-relatorio"' in html
+        assert 'href="#exportar-relatorio"' in html
+        assert '<form method="post"' in html
+
     def test_report_requer_login(self, client):
         url = reverse('finances:report')
         response = client.get(url)
@@ -1245,3 +1261,145 @@ class TestReportView:
             'formato': 'pdf',
         })
         assert response.status_code == 200  # Re-renders form with errors
+
+
+@pytest.mark.django_db
+class TestMonthlyBudgetFeature:
+    def test_budget_status_calculation(self, usuario):
+        from finances.selectors import get_budget_status
+
+        MonthlyBudgetConfig.objects.create(
+            usuario=usuario,
+            renda_mensal=Decimal('5000.00'),
+            limite_percentual=Decimal('80.00'),
+            alertas_ativos=True,
+        )
+
+        Transaction.objects.create(
+            usuario=usuario,
+            valor=Decimal('1500.00'),
+            data=date.today(),
+            tipo='saida',
+            descricao='Despesa mês',
+        )
+
+        status = get_budget_status(usuario)
+        assert status is not None
+        assert status['limite_mensal'] == Decimal('4000.00')
+        assert status['total_saidas'] == Decimal('1500.00')
+        assert status['restante'] == Decimal('2500.00')
+
+    def test_budget_alert_thresholds_and_post_limit(self, usuario, monkeypatch):
+        sent_messages = []
+
+        monkeypatch.setattr(
+            'finances.services._send_budget_telegram_alert',
+            lambda user, message: sent_messages.append(message) or True,
+        )
+
+        MonthlyBudgetConfig.objects.create(
+            usuario=usuario,
+            renda_mensal=Decimal('1000.00'),
+            limite_percentual=Decimal('80.00'),  # limite = 800
+            alertas_ativos=True,
+        )
+
+        Transaction.objects.create(
+            usuario=usuario,
+            valor=Decimal('640.00'),
+            data=date.today(),
+            tipo='saida',
+            descricao='Cruza 80%',
+        )
+        Transaction.objects.create(
+            usuario=usuario,
+            valor=Decimal('100.00'),
+            data=date.today(),
+            tipo='saida',
+            descricao='Cruza 90%',
+        )
+        Transaction.objects.create(
+            usuario=usuario,
+            valor=Decimal('60.00'),
+            data=date.today(),
+            tipo='saida',
+            descricao='Atinge 100%',
+        )
+        Transaction.objects.create(
+            usuario=usuario,
+            valor=Decimal('10.00'),
+            data=date.today(),
+            tipo='saida',
+            descricao='Após limite',
+        )
+
+        eventos = BudgetAlertEvent.objects.filter(
+            usuario=usuario,
+            ano=date.today().year,
+            mes=date.today().month,
+        )
+        assert eventos.filter(event_type=BudgetAlertEvent.EVENT_THRESHOLD_20).count() == 1
+        assert eventos.filter(event_type=BudgetAlertEvent.EVENT_THRESHOLD_10).count() == 1
+        assert eventos.filter(event_type=BudgetAlertEvent.EVENT_LIMIT_REACHED).count() == 1
+        assert eventos.filter(event_type=BudgetAlertEvent.EVENT_POST_LIMIT_EXPENSE).count() >= 1
+        assert len(sent_messages) >= 4
+
+    def test_budget_alerts_disabled(self, usuario, monkeypatch):
+        sent_messages = []
+        monkeypatch.setattr(
+            'finances.services._send_budget_telegram_alert',
+            lambda user, message: sent_messages.append(message) or True,
+        )
+
+        MonthlyBudgetConfig.objects.create(
+            usuario=usuario,
+            renda_mensal=Decimal('1000.00'),
+            limite_percentual=Decimal('80.00'),
+            alertas_ativos=False,
+        )
+
+        Transaction.objects.create(
+            usuario=usuario,
+            valor=Decimal('900.00'),
+            data=date.today(),
+            tipo='saida',
+            descricao='Sem alerta',
+        )
+
+        assert sent_messages == []
+        assert BudgetAlertEvent.objects.filter(usuario=usuario).count() == 0
+
+    def test_budget_config_view_get_and_post(self, client_autenticado, usuario):
+        url = reverse('finances:budget_config')
+        response = client_autenticado.get(url)
+        assert response.status_code == 200
+        html = response.content.decode('utf-8')
+        assert 'id="open-budget-config-modal"' in html
+        assert 'id="budget-config-modal"' in html
+        assert 'Configuração de alertas' in html
+
+        post = client_autenticado.post(url, {
+            'renda_mensal': '7000.00',
+            'limite_percentual': '80.00',
+            'alertas_ativos': 'on',
+        })
+        assert post.status_code == 302
+
+        config = MonthlyBudgetConfig.objects.get(usuario=usuario)
+        assert config.renda_mensal == Decimal('7000.00')
+        assert config.limite_percentual == Decimal('80.00')
+        assert config.alertas_ativos is True
+
+    def test_dashboard_shows_budget_block(self, client_autenticado, usuario):
+        MonthlyBudgetConfig.objects.create(
+            usuario=usuario,
+            renda_mensal=Decimal('4000.00'),
+            limite_percentual=Decimal('80.00'),
+            alertas_ativos=True,
+        )
+        response = client_autenticado.get(reverse('dashboard:dashboard'))
+        assert response.status_code == 200
+        html = response.content.decode('utf-8')
+        assert 'Alerta de orçamento' in html
+        assert 'Ir para Orçamento' in html
+        assert 'Calendário de Gastos' not in html
